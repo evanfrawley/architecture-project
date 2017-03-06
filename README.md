@@ -2,8 +2,8 @@
 
 This repo contains code for two different versions of an application to manage political resistance actions, created as part of an assignment for the [Software Architecture](https://canvas.uw.edu/courses/1100150) course at the UW iSchool. Each version utilizes an architectural style:
 
-1. Evan Frawley
-2. Wei-Jen Chiang
+1. Style 1
+2. Style 2
 
 See the individual folders for more details.
 
