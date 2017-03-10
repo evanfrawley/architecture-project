@@ -1,5 +1,5 @@
-var zipcodeMap = require('../data/zipcode-locations.json');
-var geolib = require('geolib');
+let zipcodeMap = require('../data/zipcode-locations.json');
+let geolib = require('geolib');
 
 import {Protester} from './protester';
 import {Protest} from './protest';
@@ -65,7 +65,7 @@ export class ResistanceManager {
 
     // General search helper function
     find(searchArray: any[], searchName: string): string[] {
-        var results: string[] = [];
+        let results: string[] = [];
         searchArray.filter((item) => {
             if(item.getName().toLowerCase().includes(searchName.toLowerCase())) {
                 results.push(item.getName());
@@ -99,7 +99,7 @@ export class ResistanceManager {
 
     // Returns all the Protesters involved in a Protest and their email addresses
     getProtesters(protestName: string): string[] {
-        var results: string[] = [];
+        let results: string[] = [];
         this.protests.forEach((protest) => {
             if (protest.getName() === protestName) {
                 protest.getProtesters().forEach((protester) => {
@@ -112,12 +112,12 @@ export class ResistanceManager {
 
     // Returns Protesters who are near a Protest
     getUsersNearProtest(protestName: string, radius: number): string[] {
-        var results: string[] = [];
+        let results: string[] = [];
         this.protests.forEach((protest) => {
             if (protest.getName() === protestName) {
                 protest.getProtesters().forEach((protester) => {
-                    var distance = geolib.getDistance(zipcodeMap[protest.getZipcode()], zipcodeMap[protester.getZipcode()]); // in meters
-                    var distanceInMiles = distance * 0.000621371;
+                    let distance = geolib.getDistance(zipcodeMap[protest.getZipcode()], zipcodeMap[protester.getZipcode()]); // in meters
+                    let distanceInMiles = distance * 0.000621371;
                     if (distanceInMiles <= radius) {
                         results.push(protester.getName() + ' (' + protester.getEmail() + ')');
                     }
@@ -129,14 +129,14 @@ export class ResistanceManager {
 
     // Returns Protests near a location, as well as the Movement they are part of
     getNearbyProtests(zipcode: string, radius: number): string[] {
-        var results = [];
+        let results = [];
 
         // First, add the protest with no movement to the result
         this.protests.forEach((protest) => {
-            var distance = geolib.getDistance(zipcodeMap[zipcode], zipcodeMap[protest.getZipcode()]); // in meters
-            var distanceInMiles = distance * 0.000621371;
+            let distance = geolib.getDistance(zipcodeMap[zipcode], zipcodeMap[protest.getZipcode()]); // in meters
+            let distanceInMiles = distance * 0.000621371;
             if (distanceInMiles <= radius) {
-                var result = {
+                let result = {
                     name: protest.getName(),
                     movement: 'Not part of a movement'
                 };
@@ -156,7 +156,7 @@ export class ResistanceManager {
         });
 
         // String it together
-        for (var i = 0; i < results.length; i++) {
+        for (let i = 0; i < results.length; i++) {
             results[i] = results[i].name + ' (' + results[i].movement + ')';
         }
         return results;

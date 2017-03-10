@@ -30,7 +30,7 @@ export class Protest {
     // Adds a Protester
     addProtester(newProtester: Protester) {
         // If the name already exists, bail out.
-        for (var i = 0; i < this.protesters.length; i++) {
+        for (let i = 0; i < this.protesters.length; i++) {
             if (this.protesters[i].getName() === newProtester.getName()) {
                 return;
             }

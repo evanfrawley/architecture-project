@@ -15,7 +15,7 @@ export class Movement {
 
     // Adds a Protest
     addProtest(newProtest: Protest) {
-        for (var i = 0; i < this.protests.length; i++) {
+        for (let i = 0; i < this.protests.length; i++) {
             if (this.protests[i].getName() === newProtest.getName()) {
                 return;
             }
