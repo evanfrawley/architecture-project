@@ -1,5 +1,5 @@
 {
-  "name": "pipe-and-filter",
+  "name": "common",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,5 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Evan and Wei-Jen",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^6.0.58",
+    "geolib": "^2.0.22",
+    "readline-sync": "^1.4.5"
+  }
 }

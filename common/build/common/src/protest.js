@@ -2,10 +2,11 @@
  * Created by Wei-Jen on 1/18/17.
  */
 "use strict";
+var location_1 = require("./location");
 var Protest = (function () {
     function Protest(name, zipcode, time) {
         this.name = name;
-        this.location = new ZcLocation(zipcode);
+        this.location = new location_1.ZcLocation(zipcode);
         this.time = new Date(time);
         this.protesters = [];
         this.movements = [];

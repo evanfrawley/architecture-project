@@ -1,8 +1,8 @@
 //User Interface for The Resistance Manager
-//@author Joel Ross
 
-var readlineSync = require('readline-sync'); //for easier repeated prompts
-import {ResistanceManager} from './resistance';
+let readlineSync = require('readline-sync'); //for easier repeated prompts
+
+import {ResistanceManager} from '../../common/src/resistance';
 
 /**
  * Function to run the UI
@@ -27,10 +27,15 @@ function showMainMenu(rm:ResistanceManager) {
   7. List protest members
   8. List members near a protest
   9. List protests near a location
-  10. Exit`);
+  10. Load in existing resistance data
+  11. Exit`);
 
-    let response = readlineSync.question('> ')
-    if(response === '10' || response.slice(0,2).toLowerCase() === ':q'){
+    let response = readlineSync.question('> ');
+    if(response === '11' || response.slice(0,2).toLowerCase() === ':q'){
+      let saveWork = readlineSync.question('Do you want to save the data? (y/n): ');
+      if (saveWork.toLowerCase().startsWith('y')) {
+        console.log("work saved!");
+      }
       break; //stop looping, thus leaving method
     }
 
@@ -44,7 +49,9 @@ function showMainMenu(rm:ResistanceManager) {
       case '7': showListProtestersMenu(rm); break;
       case '8': showListNearbyMembersMenu(rm); break;
       case '9': showListNearbyProtestsMenu(rm); break;
-      //case 10 handled above
+      case '10': showLoadExistingResistanceDataMenu(rm); break;
+
+      //case 11 handled above
       default: console.log('Invalid option!');
     }
     console.log(''); //extra empty line for revisiting
@@ -259,4 +266,14 @@ function showListNearbyProtestsMenu(rm:ResistanceManager) {
   console.log('  '+protests.join('\n  ')+'\n');
 
   readlineSync.keyInPause('(Press any letter to continue)', {guide:false}); //so have time to read stuff
+}
+
+/**
+ * Loads existing resistance data
+ */
+function showLoadExistingResistanceDataMenu(rm:ResistanceManager) {
+  let fileName = readlineSync.question('  File Name: ');
+
+
+  readlineSync.keyInPause('(Press any letter to continue)', {guide:false}); //so have time to read stuf
 }

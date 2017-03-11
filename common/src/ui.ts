@@ -2,7 +2,7 @@
 //@author Joel Ross
 
 var readlineSync = require('readline-sync'); //for easier repeated prompts
-import {ResistanceManager} from './resistance';
+import {ResistanceManager} from '../../layered/src/resistance';
 
 /**
  * Function to run the UI
@@ -29,7 +29,7 @@ function showMainMenu(rm:ResistanceManager) {
   9. List protests near a location
   10. Exit`);
 
-    let response = readlineSync.question('> ')
+    let response = readlineSync.question('> ');
     if(response === '10' || response.slice(0,2).toLowerCase() === ':q'){
       break; //stop looping, thus leaving method
     }

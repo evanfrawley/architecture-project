@@ -1,78 +1,61 @@
 /**
  * Created by Wei-Jen on 1/18/17.
  */
-
-import {Protester} from './protester';
-import {Movement} from "./movement";
-
-export class Protest {
-    private name: string;
-    private location: ZcLocation;
-    private time: Date;
-    private protesters: Protester[];
-    private movements: Movement[];
-
-    constructor(name: string, zipcode?: string, time?: string) {
+"use strict";
+var location_1 = require("./location");
+var Protest = (function () {
+    function Protest(name, zipcode, time) {
         this.name = name;
-        this.location = new ZcLocation(zipcode);
+        this.location = new location_1.ZcLocation(zipcode);
         this.time = new Date(time);
         this.protesters = [];
         this.movements = [];
     }
-
     // Change the name or time of the Protest
-    modify(newName?: string, newTime?: string) {
+    Protest.prototype.modify = function (newName, newTime) {
         if (newName) {
             this.name = newName;
         }
         if (newTime) {
             this.time = new Date(newTime);
         }
-    }
-
+    };
     // Adds a Protester
-    addProtester(newProtester: Protester) {
+    Protest.prototype.addProtester = function (newProtester) {
         // If the name already exists, bail out.
-        for (let i = 0; i < this.protesters.length; i++) {
+        for (var i = 0; i < this.protesters.length; i++) {
             if (this.protesters[i].getName().toLowerCase() === newProtester.getName().toLowerCase()) {
                 return;
             }
         }
-
         this.protesters.push(newProtester);
-    }
-
+    };
     // Adds a Movement
-    addMovemnet(newMovement: Movement) {
+    Protest.prototype.addMovemnet = function (newMovement) {
         // If the name already exists, bail out.
-        for (let i = 0; i < this.movements.length; i++) {
+        for (var i = 0; i < this.movements.length; i++) {
             if (this.movements[i].getName().toLowerCase() === newMovement.getName().toLowerCase()) {
                 return;
             }
         }
-
         this.movements.push(newMovement);
-    }
-
-
+    };
     // Getter methods
-    getName(): string {
+    Protest.prototype.getName = function () {
         return this.name;
-    }
-
-    getLocation(): ZcLocation {
+    };
+    Protest.prototype.getLocation = function () {
         return this.location;
-    }
-
-    getTime(): Date {
+    };
+    Protest.prototype.getTime = function () {
         return this.time;
-    }
-
-    getProtesters(): Protester[] {
+    };
+    Protest.prototype.getProtesters = function () {
         return this.protesters;
-    }
-
-    getMovements() : Movement[] {
+    };
+    Protest.prototype.getMovements = function () {
         return this.movements;
-    }
-}
+    };
+    return Protest;
+}());
+exports.Protest = Protest;

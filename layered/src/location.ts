@@ -4,7 +4,7 @@
 let zipcodeMap = require('../data/zipcode-locations.json');
 let geolib = require('geolib');
 
-class ZcLocation {
+export class ZcLocation {
     private zipcode: string;
 
     constructor(zipcode: string) {

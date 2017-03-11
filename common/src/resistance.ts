@@ -1,5 +1,3 @@
-
-
 import {Protester} from './protester';
 import {Protest} from './protest';
 import {Movement} from './movement';

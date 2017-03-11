@@ -4,6 +4,7 @@
 
 import {Protester} from './protester';
 import {Movement} from "./movement";
+import {ZcLocation} from './location';
 
 export class Protest {
     private name: string;

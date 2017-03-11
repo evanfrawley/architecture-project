@@ -1,8 +1,8 @@
 //User Interface for The Resistance Manager
 //@author Joel Ross
 "use strict";
-var readlineSync = require("readline-sync"); //for easier repeated prompts
-var resistance_1 = require("./resistance");
+var readlineSync = require('readline-sync'); //for easier repeated prompts
+var resistance_1 = require("../../layered/src/resistance");
 /**
  * Function to run the UI
  */
@@ -116,19 +116,19 @@ function showAddToProtestMenu(rm, protestName) {
  * Show menu to look up a member. Will return undefined if no member selected.
  */
 function showSearchMembersMenu(rm) {
-    return _searchListMenu('member', rm.findMemberNames);
+    return _searchListMenu('member', function (q) { return rm.findMemberNames(q); });
 }
 /**
  * Show menu to look up a protest. Will return undefined if no protest selected.
  */
 function showSearchProtestsMenu(rm) {
-    return _searchListMenu('protest', rm.findProtestNames);
+    return _searchListMenu('protest', function (q) { return rm.findProtestNames(q); });
 }
 /**
  * Show menu to look up a movement. Will return undefined if no movement selected.
  */
 function showSearchMovementsMenu(rm) {
-    return _searchListMenu('movement', rm.findMovementNames);
+    return _searchListMenu('movement', function (q) { return rm.findMovementNames(q); });
 }
 /**
  * Helper function that shows a menu to search a list of items and choose a result.

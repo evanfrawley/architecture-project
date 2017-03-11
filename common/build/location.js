@@ -19,3 +19,4 @@ var ZcLocation = (function () {
     };
     return ZcLocation;
 }());
+exports.ZcLocation = ZcLocation;
