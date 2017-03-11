@@ -146,15 +146,16 @@ export class ResistanceManager {
             if (protest.getLocation().isWithinRadius(zipcode, radius)) {
                 let result = protest.getName();
                 let movements = protest.getMovements();
+                let movementsInNames = movements.map((movement) => {return movement.getName()});
+                console.log(movementsInNames);
                 if (movements.length <= 0) {
                     result += " (Not part of any movement)";
                 } else {
-                    result += " (" +  movements.join(", ") + ")";
+                    result += " (" +  movementsInNames.join(", ") + ")";
                 }
                 results.push(result);
             }
         });
-
         return results;
     }
 

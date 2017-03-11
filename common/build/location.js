@@ -2,7 +2,7 @@
 /**
  * Created by Wei-Jen on 1/17/17.
  */
-var zipcodeMap = require('../../../data/zipcode-locations.json');
+var zipcodeMap = require('../../data/zipcode-locations.json');
 var geolib = require('geolib');
 var ZcLocation = (function () {
     function ZcLocation(zipcode) {

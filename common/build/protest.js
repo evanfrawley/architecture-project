@@ -31,7 +31,7 @@ var Protest = (function () {
         this.protesters.push(newProtester);
     };
     // Adds a Movement
-    Protest.prototype.addMovemnet = function (newMovement) {
+    Protest.prototype.addMovement = function (newMovement) {
         // If the name already exists, bail out.
         for (var i = 0; i < this.movements.length; i++) {
             if (this.movements[i].getName().toLowerCase() === newMovement.getName().toLowerCase()) {

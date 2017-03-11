@@ -118,11 +118,13 @@ var ResistanceManager = (function () {
             if (protest.getLocation().isWithinRadius(zipcode, radius)) {
                 var result = protest.getName();
                 var movements = protest.getMovements();
+                var movementsInNames = movements.map(function (movement) { return movement.getName(); });
+                console.log(movementsInNames);
                 if (movements.length <= 0) {
                     result += " (Not part of any movement)";
                 }
                 else {
-                    result += " (" + movements.join(", ") + ")";
+                    result += " (" + movementsInNames.join(", ") + ")";
                 }
                 results.push(result);
             }

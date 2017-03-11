@@ -1,7 +1,7 @@
 /**
  * Created by Wei-Jen on 1/17/17.
  */
-let zipcodeMap = require('../../../data/zipcode-locations.json');
+let zipcodeMap = require('../../data/zipcode-locations.json');
 let geolib = require('geolib');
 
 export class ZcLocation {
