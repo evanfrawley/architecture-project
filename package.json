@@ -1,5 +1,5 @@
 {
-  "name": "common",
+  "name": "hwk-arch-resist-evanfrawley",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,6 +9,7 @@
   "author": "Evan and Wei-Jen",
   "license": "ISC",
   "dependencies": {
+    "file-system": "^2.2.2",
     "@types/node": "^6.0.58",
     "geolib": "^2.0.22",
     "readline-sync": "^1.4.5"

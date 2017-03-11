@@ -4,6 +4,6 @@
         "module": "commonjs",
         "outDir": "build/",
         "alwaysStrict": true,
-        "compileOnSave":false
+        "compileOnSave":true
     }
 }
