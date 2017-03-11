@@ -2,7 +2,7 @@
  * Created by Wei-Jen on 1/18/17.
  */
 
-import {ZcLocation} from './location';
+import {ZcLocation} from "./location";
 
 export class Protester {
     private name: string;

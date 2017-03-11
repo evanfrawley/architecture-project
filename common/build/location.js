@@ -8,7 +8,7 @@ var ZcLocation = (function () {
     function ZcLocation(zipcode) {
         this.zipcode = zipcode;
     }
-    // Deteremines whether or not this falls with the desired radius.
+    // Determines whether or not this falls with the desired radius.
     ZcLocation.prototype.isWithinRadius = function (zipcode, radius) {
         var distance = geolib.getDistance(zipcodeMap[this.zipcode], zipcodeMap[zipcode]);
         var distanceInMiles = distance * 0.000621371;

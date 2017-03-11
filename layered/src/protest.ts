@@ -4,9 +4,9 @@
 
 import {Protester} from './protester';
 import {Movement} from "./movement";
-import {ZcLocation} from './location';
+import {ZcLocation} from "./location";
 
-export class Protest {
+ export class Protest {
     private name: string;
     private location: ZcLocation;
     private time: Date;
@@ -44,7 +44,7 @@ export class Protest {
     }
 
     // Adds a Movement
-    addMovemnet(newMovement: Movement) {
+    addMovement(newMovement: Movement) {
         // If the name already exists, bail out.
         for (let i = 0; i < this.movements.length; i++) {
             if (this.movements[i].getName().toLowerCase() === newMovement.getName().toLowerCase()) {

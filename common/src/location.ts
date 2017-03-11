@@ -11,7 +11,7 @@ export class ZcLocation {
         this.zipcode = zipcode;
     }
 
-    // Deteremines whether or not this falls with the desired radius.
+    // Determines whether or not this falls with the desired radius.
     isWithinRadius(zipcode: string, radius: number): boolean {
         let distance = geolib.getDistance(zipcodeMap[this.zipcode], zipcodeMap[zipcode]);
         let distanceInMiles = distance * 0.000621371;
