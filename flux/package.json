@@ -1,5 +1,5 @@
 {
-  "name": "flux",
+  "name": "flux-arch",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,5 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Wei-Jen and Evan",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "flux": "^3.1.2"
+  }
 }
