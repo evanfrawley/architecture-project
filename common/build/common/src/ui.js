@@ -2,7 +2,7 @@
 //@author Joel Ross
 "use strict";
 var readlineSync = require('readline-sync'); //for easier repeated prompts
-var resistance_1 = require("../../layered/src/resistance");
+var resistance_1 = require("./resistance");
 /**
  * Function to run the UI
  */

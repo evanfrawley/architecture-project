@@ -1,8 +1,9 @@
 //User Interface for The Resistance Manager
 
 let readlineSync = require('readline-sync'); //for easier repeated prompts
+let fs = require('file-system');
 
-import {ResistanceManager} from '../../common/src/resistance';
+import {ResistanceManager} from './resistance';
 
 /**
  * Function to run the UI

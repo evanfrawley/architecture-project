@@ -2,7 +2,7 @@
 //@author Joel Ross
 
 var readlineSync = require('readline-sync'); //for easier repeated prompts
-import {ResistanceManager} from '../../layered/src/resistance';
+import {ResistanceManager} from './resistance';
 
 /**
  * Function to run the UI
