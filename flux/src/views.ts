@@ -1,131 +1,217 @@
 import {ResistanceStore} from "./stores";
+import {} from './action';
 import * as $ from 'jquery';
+import {ResistanceAction} from "./action";
+import {InputClearer} from './util';
+import {Movement} from './components/movement';
+import {Protest} from './components/protest';
+import {Protester} from './components/protester';
 
-class ListView {
+
+interface ListView {
+  createList(list:HTMLUListElement, items:any[]):void
+  render():void
+}
+
+interface InputView {
+  readonly id:string;
+  inputClearer:InputClearer;
+}
+
+class ProtesterListView implements ListView {
 
   constructor(private resistanceStore:ResistanceStore) {
     resistanceStore.on('change', (e) => { this.render(); });
+  }
+
+  createList(list, items) {
+    items.forEach((item) => {
+      list.append(`<li>Name: ${item.getName()} Email: ${item.getEmail()} ZIP: ${item.getZipcode()}</li>`); //add item for each
+    });
   }
 
   render(){
-    let list = $('#todo-list');
-    list.empty();
-    let items = this.resistanceStore.getProtesters();
-    items.forEach((item) => {
-      list.append(`<li>${item}</li>`); //add item for each
-    })
-    list.append(`<li><em>memes</em></li>`); //add draft
+    let protesterList = $('#protesterList');
+    protesterList.empty();
+    let protesters = this.resistanceStore.getProtesters();
+
+    this.createList(protesterList, protesters);
   }
 }
 
-class ProtesterInputView {
+class ProtestListView implements ListView {
   constructor(private resistanceStore:ResistanceStore) {
     resistanceStore.on('change', (e) => { this.render(); });
+  }
 
-    // PROTESTERS
+  createList(list, items) {
+    items.forEach((item) => {
+      let itemText = `<li>Protest Name: ${item.getName()} ZIP: ${item.getZipcode()} Date/Time: ${item.getTime()}</li>`
+      if(item.getProtesters().length > 0) {
+        let nestedList = $(`<ul></ul>`);
+        item.getProtesters().forEach((protester) => {
+          nestedList.append(`<li>Protester Name: ${protester.getName()} ZIP: ${protester.getZipcode()}</li>`)
+        });
+        let li = $(itemText);
+        li.append(nestedList);
+        list.append(li);
+      } else {
+        list.append(itemText);
+      }
+    });
+  }
+  render(){
+    let protestList = $('#protestList');
+    protestList.empty();
+    let protests = this.resistanceStore.getProtests();
+
+    this.createList(protestList, protests);
+
+  }
+}
+
+class MovementListView implements ListView {
+  constructor(private resistanceStore:ResistanceStore) {
+    resistanceStore.on('change', (e) => { this.render(); });
+  }
+
+  createList(list, items) {
+    items.forEach((item) => {
+      list.append(`<li>${item.getName()}</li>`); //add item for each
+    });
+  }
+  render(){
+
+    let movementList = $('#movementList');
+    movementList.empty();
+    let movements = this.resistanceStore.getMovements();
+
+    this.createList(movementList, movements);
+  }
+}
+
+class OtherListView implements ListView {
+
+  constructor(private resistanceStore:ResistanceStore) {
+    resistanceStore.on('change', (e) => { this.render(); })
+  }
+
+  createList(list, items) {
+    items.forEach((item) => {
+      list.append(`<li>${item.getName()}</li>`); //add item for each
+    });
+  }
+
+  render() {
+
+    let otherList = $('#otherList');
+    otherList.empty();
+    let otherElements = this.resistanceStore.getOtherElements();
+
+    this.createList(otherList, otherElements);
+  }
+}
+
+class ProtesterInputView implements InputView {
+  public readonly id:string;
+  public inputClearer:InputClearer;
+  constructor(private resistanceStore:ResistanceStore) {
+    this.id = "protesters";
+    this.inputClearer = new InputClearer(this.id);
+    resistanceStore.on('change', (e) => { this.render(); });
+
     let protesterSubmit = $('#protesterSubmit');
     protesterSubmit.on('click', (e) => {
       e.preventDefault();
-      // retreive values
       let email =  $('#email').val();
       let zip = $('#protesterZip').val();
       let name = $('#protesterNameInput').val();
-
-      // clear values
-      $('#protesterNameInput').val('');
-      $('#protesterZip').val('');
-      $('#email').val('')
-      // TODO Actions.action(input value)
+      this.inputClearer.clear();
+      ResistanceAction.addNewProtester(name, email, zip);
     });
+  }
 
 
-    // PROTESTS
+
+  render() { }
+}
+
+class ProtestInputView implements InputView {
+
+  public readonly id:string;
+  public inputClearer:InputClearer;
+  constructor(private resistanceStore:ResistanceStore) {
+    resistanceStore.on('change', (e) => { this.render(); });
+    this.id = 'protests';
+    this.inputClearer = new InputClearer(this.id);
     let protestSubmit = $('#protestSubmit');
     protestSubmit.on('click', (e) => {
       e.preventDefault();
-      // retreive values
       let dateTime =  $('#dateTime').val();
       let zip = $('#protestZip').val();
       let name = $('#protestNameInput').val();
-
-      // clear values
-      $('#protestNameInput').val('');
-      $('#protestZip').val('');
-      $('#dateTime').val('');
-      // TODO Actions.action(input value)
+      ResistanceAction.addNewProtest(name, dateTime, zip);
+      this.inputClearer.clear();
     });
 
-
-    // MOVEMENTS
-    let movementSubmit = $('#movementSubmit');
-    protestSubmit.on('click', (e) => {
+    let protesterToProtest = $('#protesterToProtestSubmit');
+    protesterToProtest.on('click', (e) => {
       e.preventDefault();
-      // retreive values
-      let name = $('#movementNameInput').val();
-
-      // clear values
-      $('#movementNameInput').val('');
-      // TODO Actions.action(input value)
+      let protesterName = $('#protesterToProtest').val();
+      let protestName = $('#protestReceiving').val();
+      ResistanceAction.addProtesterToProtest(protestName, protesterName);
+      this.inputClearer.clear();
     });
 
-  }
 
-  render() {
-    let input = $('#newItem');
+    let getProtesterInProtest = $('#protesterAtProtestSubmit');
+    getProtesterInProtest.on('click', (e) => {
+      e.preventDefault();
+      let protestName = $('#protesterAtProtest').val();
+      ResistanceAction.getProtestProtesters(protestName);
+      this.inputClearer.clear();
+    })
   }
+  render() { }
 }
 
-class ProtestInputView {
+class MovementInputView implements InputView {
+
+  public readonly id:string;
+  public inputClearer:InputClearer;
+
   constructor(private resistanceStore:ResistanceStore) {
     resistanceStore.on('change', (e) => { this.render(); });
-
-    // PROTESTS
-    let protestSubmit = $('#protestSubmit');
-    protestSubmit.on('click', (e) => {
-      e.preventDefault();
-      // retreive values
-      let dateTime =  $('#dateTime').val();
-      let zip = $('#protestZip').val();
-      let name = $('#protestNameInput').val();
-
-      // clear values
-      $('#protestNameInput').val('');
-      $('#protestZip').val('');
-      $('#dateTime').val('');
-      // TODO Actions.action(input value)
-    });
-
-  }
-
-  render() {
-    let input = $('#newItem');
-  }
-
-}
-
-class MovementInputView {
-  constructor(private resistanceStore:ResistanceStore) {
-    resistanceStore.on('change', (e) => { this.render(); });
-
-    // MOVEMENTS
+    this.id = 'movements';
+    this.inputClearer = new InputClearer(this.id);
     let movementSubmit = $('#movementSubmit');
     movementSubmit.on('click', (e) => {
       e.preventDefault();
-      // retreive values
       let name = $('#movementNameInput').val();
+      ResistanceAction.addNewMovement(name);
+      this.inputClearer.clear();
+    });
 
-      // clear values
-      $('#movementNameInput').val('');
-      // TODO Actions.action(input value)
+    let addProtestToMovement = $('#protestToMovementSubmit');
+    addProtestToMovement.on('click', (e) => {
+      e.preventDefault();
+      let protestName = $('#protestToMovement').val();
+      let movementName = $('#movementReceiving').val();
+      ResistanceAction.addProtestToMovement(movementName, protestName);
+      this.inputClearer.clear();
     });
 
   }
-
-  render() {
-    let input = $('#newItem');
-  }
+  render() { }
 
 }
 
-
-export {ListView, ProtesterInputView, ProtestInputView, MovementInputView};
+export {
+  ProtesterListView,
+  ProtestListView,
+  MovementListView,
+  OtherListView,
+  ProtesterInputView,
+  ProtestInputView,
+  MovementInputView
+};

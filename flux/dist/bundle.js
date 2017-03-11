@@ -518,16 +518,18 @@ exports.InputView = InputView;
 Object.defineProperty(exports, "__esModule", { value: true });
 var flux_1 = __webpack_require__(1);
 var stores_1 = __webpack_require__(4);
-var action_1 = __webpack_require__(0);
-var views_1 = __webpack_require__(5);
+var View = __webpack_require__(5);
 //define the dispatcher
 var ResistanceDispatcher = new flux_1.Dispatcher();
 exports.ResistanceDispatcher = ResistanceDispatcher;
 //main
 var store = new stores_1.ResistanceStore();
-var listView = new views_1.ListView(store);
-var inputView = new views_1.ProtesterInputView(store);
-action_1.ToDoActions.addNewProtester("Say hello"); //starting item (testing)
+var protesterListView = new View.ProtesterListView(store);
+var protestListView = new View.ProtestListView(store);
+var movementListView = new View.MovementListView(store);
+var protesterInputView = new View.ProtesterInputView(store);
+var protestInputView = new View.ProtestInputView(store);
+var movementrInputView = new View.MovementInputView(store);
 
 
 /***/ }),

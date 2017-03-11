@@ -5,7 +5,7 @@ class Action {
   constructor(readonly actionType:string, readonly data?:any){}
 }
 
-class ToDoActions {
+class ResistanceAction {
   //type constants
   static readonly ADD_NEW_PROTESTOR = 'add_new_protester';
   static readonly ADD_NEW_PROTEST = 'add_new_protest';
@@ -18,59 +18,59 @@ class ToDoActions {
   static readonly GET_PROTESTS_NEAR_LOCATION = 'get_protests_near_location';
 
   // add new protester
-  static addNewProtester(item){
-    let action = new Action(ToDoActions.ADD_NEW_PROTESTOR, {text:item});
+  static addNewProtester(name, email, zip){
+    let action = new Action(ResistanceAction.ADD_NEW_PROTESTOR, {name:name, email:email, zip:zip});
     ResistanceDispatcher.dispatch(action);
   }
 
   // add new protester
-  static addNewProtest(item){
-    let action = new Action(ToDoActions.ADD_NEW_PROTEST, {text:item});
+  static addNewProtest(name, dateTime, zip){
+    let action = new Action(ResistanceAction.ADD_NEW_PROTEST, {name:name, dateTime:dateTime, zip:zip});
     ResistanceDispatcher.dispatch(action);
   }
 
   // add new protester
-  static addNewMovement(item){
-    let action = new Action(ToDoActions.ADD_NEW_MOVEMENT, {text:item});
+  static addNewMovement(name){
+    let action = new Action(ResistanceAction.ADD_NEW_MOVEMENT, {name:name});
     ResistanceDispatcher.dispatch(action);
   }
 
   // add new protester
   static modifyProtest(item){
-    let action = new Action(ToDoActions.MODIFY_PROTEST, {text:item});
+    let action = new Action(ResistanceAction.MODIFY_PROTEST, {text:item});
     ResistanceDispatcher.dispatch(action);
   }
 
   // add new protester
-  static addProtestToMovement(item){
-    let action = new Action(ToDoActions.ADD_PROTEST_TO_MOVEMENT, {text:item});
+  static addProtestToMovement(movementName, protestName){
+    let action = new Action(ResistanceAction.ADD_PROTEST_TO_MOVEMENT, {movementName:movementName, protestName:protestName});
     ResistanceDispatcher.dispatch(action);
   }
 
   // add new protester
-  static addProtesterToProtest(item){
-    let action = new Action(ToDoActions.ADD_PROTESTER_TO_PROTEST, {text:item});
+  static addProtesterToProtest(protestName, protesterName){
+    let action = new Action(ResistanceAction.ADD_PROTESTER_TO_PROTEST, {protestName:protestName, protesterName:protesterName});
     ResistanceDispatcher.dispatch(action);
   }
 
   // add new protester
-  static getProtestProtesters(item){
-    let action = new Action(ToDoActions.GET_PROTESTS_MEMBERS, {text:item});
+  static getProtestProtesters(protestName){
+    let action = new Action(ResistanceAction.GET_PROTESTS_MEMBERS, {protestName:protestName});
     ResistanceDispatcher.dispatch(action);
   }
 
   // add new protester
   static getProtestersNearProtest(item){
-    let action = new Action(ToDoActions.GET_PROTESTERS_NEAR_PROTEST, {text:item});
+    let action = new Action(ResistanceAction.GET_PROTESTERS_NEAR_PROTEST, {text:item});
     ResistanceDispatcher.dispatch(action);
   }
 
   // add new protester
   static getProtestsNearLocation(item){
-    let action = new Action(ToDoActions.GET_PROTESTS_NEAR_LOCATION, {text:item});
+    let action = new Action(ResistanceAction.GET_PROTESTS_NEAR_LOCATION, {text:item});
     ResistanceDispatcher.dispatch(action);
   }
 }
 
-export {ToDoActions, Action};
+export {ResistanceAction, Action};
 

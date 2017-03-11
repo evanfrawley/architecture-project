@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
+    <h1>Flux Architecture Project</h1>
+    <p>Hiya, so this is my flux architecture assignment. To work with it, just manually enter stuff, and see if change in the lists below (scroll down)! The other output list is for when you want to query for protesters at or near stuff. You're also able to open a new tab and have another different instance of the Resistance Manager. Cheers!</p>
     <div id="forms" class="flex-container">
         <div id="protesters" class="flex-item">
             <div class="controlsContainer">
@@ -25,6 +27,26 @@
                         <input type="text" class="form-control" id="protesterZip" placeholder="Enter ZIP">
                     </div>
                     <button id="protesterSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <div class="controlsContainer">
+            <form>
+                <legend>Get Protesters @ Protest</legend>
+                <div class="form-group">
+                    <label for="protesterAtProtest">Protester ZIP</label>
+                    <input type="text" class="form-control" id="protesterAtProtest" placeholder="Enter Protest name">
+                </div>
+                <button id="protesterAtProtestSubmit"  class="btn btn-primary">Submit</button>
+            </form>
+            </div>
+            <div class="controlsContainer">
+                <form>
+                    <legend>Get Protesters Near</legend>
+                    <div class="form-group">
+                        <label for="protesterNear">Name of Protest or ZIP</label>
+                        <input type="text" class="form-control" id="protesterNear" placeholder="Enter Protest name or ZIP">
+                    </div>
+                    <button id="protesterNearSubmit"  class="btn btn-primary">Submit</button>
                 </form>
             </div>
         </div>
@@ -51,8 +73,12 @@
                 <form>
                     <legend>Add a Protester to a Protest</legend>
                     <div class="form-group">
-                        <label for="protesterToProtest">Name of Protester</label>
+                        <label for="protesterToProtest">Protester Name</label>
                         <input type="text" class="form-control" id="protesterToProtest" placeholder="Enter protester name">
+                    </div>
+                    <div class="form-group">
+                        <label for="protestReceiving">Protest Name</label>
+                        <input type="text" class="form-control" id="protestReceiving" placeholder="Enter protest name getting protester">
                     </div>
                     <button id="protesterToProtestSubmit"  class="btn btn-primary">Submit</button>
                 </form>
@@ -63,7 +89,7 @@
                 <form>
                     <legend>Add a Movement</legend>
                     <div class="form-group">
-                        <label for="movementNameInput">Movement Name</label>
+                        <label for="movementNameInput">Name of Movement</label>
                         <input type="text" class="form-control" id="movementNameInput" placeholder="Enter movement name">
                     </div>
                     <button id="movementSubmit"  class="btn btn-primary">Submit</button>
@@ -73,8 +99,12 @@
                 <form>
                     <legend>Add a Protest to a Movement</legend>
                     <div class="form-group">
-                        <label for="protestToMovement">Add a Protest to a Movement</label>
+                        <label for="protestToMovement">Protest Name</label>
                         <input type="text" class="form-control" id="protestToMovement" placeholder="Enter protest name">
+                    </div>
+                    <div class="form-group">
+                        <label for="movementReceiving">Movement Name</label>
+                        <input type="text" class="form-control" id="movementReceiving" placeholder="Enter protest name">
                     </div>
                     <button id="protestToMovementSubmit"  class="btn btn-primary">Submit</button>
                 </form>
@@ -85,25 +115,29 @@
     <div id="lists" class="flex-container">
         <div class="flex-item">
             <div class="listContainer">
-                <span>Protesters</span>
+                <h2>Protesters</h2>
                 <ul id="protesterList">
-                    <li>one</li>
                 </ul>
             </div>
         </div>
         <div class="flex-item">
             <div class="listContainer">
-                <span>Protests</span>
+                <h2>Protests</h2>
                 <ul id="protestList">
-                    <li>one</li>
                 </ul>
             </div>
         </div>
         <div class="flex-item">
             <div class="listContainer">
-                <span>Movements</span>
+                <h2>Movements</h2>
                 <ul id="movementList">
-                    <li>one</li>
+                </ul>
+            </div>
+        </div>
+        <div class="flex-item">
+            <div class="listContainer">
+                <h2>Other Output List</h2>
+                <ul id="otherList">
                 </ul>
             </div>
         </div>
