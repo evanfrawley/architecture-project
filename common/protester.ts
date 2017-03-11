@@ -5,12 +5,12 @@
 export class Protester {
     private name: string;
     private email: string;
-    private zipcode: string;
+    private location: ZcLocation;
 
     constructor(name: string, email?: string, zipcode?: string) {
         this.name = name;
         this.email = email;
-        this.zipcode = zipcode;
+        this.location = new ZcLocation(zipcode);
     }
 
     // Getter methods
@@ -22,7 +22,7 @@ export class Protester {
         return this.email;
     }
 
-    getZipcode(): string {
-        return this.zipcode;
+    getLocation(): ZcLocation {
+        return this.location;
     }
 }

@@ -1,5 +1,4 @@
-let zipcodeMap = require('../data/zipcode-locations.json');
-let geolib = require('geolib');
+
 
 import {Protester} from './protester';
 import {Protest} from './protest';
@@ -36,39 +35,41 @@ export class ResistanceManager {
     // Adds a Protester to a Protest
     addMemberToProtest(memberName: string, protestName: string) {
         // Find the protester
-        this.protesters.forEach((protester) => {
-            if(protester.getName() === memberName) {
-                // Find the protest
-                this.protests.forEach((protest) => {
-                    if (protest.getName() === protestName) {
-                        protest.addProtester(protester);
-                    }
+        let protesters = this.find(this.protesters, memberName);
+
+        // Find the protest
+        let protests = this.find(this.protests, protestName);
+
+        if (protests.length > 0 && protesters.length > 0) {
+            protests.forEach((protest) => {
+                protesters.forEach((protester) => {
+                    protest.addProtester(protester)
                 });
-            }
-        });
+            });
+        }
     }
 
     // Returns Protesters in the system who match the search string
     findMemberNames(searchName: string): string[] {
-        return this.find(this.protesters, searchName);
+        return this.find(this.protesters, searchName).map((item) => { return item.getName()});
     }
 
     //  Returns Protests in the system that match the search string
     findProtestNames(searchName: string): string[] {
-        return this.find(this.protests, searchName);
+        return this.find(this.protests, searchName).map((item) => { return item.getName()});
     }
 
     //  Returns Movements in the system that match the search string
     findMovementNames(searchName: string): string[] {
-        return this.find(this.movements, searchName);
+        return this.find(this.movements, searchName).map((item) => { return item.getName()});
     }
 
     // General search helper function
-    find(searchArray: any[], searchName: string): string[] {
-        let results: string[] = [];
+    find(searchArray: any[], searchName: string): any[] {
+        let results: any[] = [];
         searchArray.filter((item) => {
             if(item.getName().toLowerCase().includes(searchName.toLowerCase())) {
-                results.push(item.getName());
+                results.push(item);
             }
         });
         return results;
@@ -76,89 +77,86 @@ export class ResistanceManager {
 
     // Alters the name and/or the time of the protest
     modifyProtest(name: string, newName?: string, newTime?: string) {
-        this.protests.forEach((protest) => {
-            if (protest.getName() === name) {
-                protest.modify(newName, newTime);
+        // Only fires when either newName or newTime is defined, otherwise no point in modifying
+        if (newName || newTime) {
+
+            let protests = this.find(this.protests, name);
+
+            // if no protest is found, bail.
+            if (protests.length < 0) {
                 return;
             }
-        });
+
+            protests[0].modify(newName, newTime);
+        }
     }
 
     // Adds a Protest to a Movement
     addProtestToMovement(protestName: string, movementName: string) {
-        this.protests.forEach((protest) => {
-            if(protest.getName() === protestName) {
-                this.movements.forEach((movement) => {
-                    if (movement.getName() === movementName) {
-                        movement.addProtest(protest);
-                    }
+        let protests = this.find(this.protests, protestName);
+
+        let movements = this.find(this.movements, movementName);
+
+        if (protests.length > 0 && movements.length > 0) {
+            movements.forEach((movement) => {
+                protests.forEach((protest) => {
+                    movement.addProtest(protest);
+                    protest.addMovement(movement);
                 });
-            }
-        });
+            });
+        }
     }
 
     // Returns all the Protesters involved in a Protest and their email addresses
     getProtesters(protestName: string): string[] {
-        let results: string[] = [];
-        this.protests.forEach((protest) => {
-            if (protest.getName() === protestName) {
-                protest.getProtesters().forEach((protester) => {
-                    results.push(protester.getName() + ' (' + protester.getEmail() + ')');
+        let results = this.find(this.protests, protestName);
+
+        if (results.length > 0) {
+            results.forEach((protest) => {
+                protest.getProtesters().map((protester) => {
+                    return protester.getName() + ' (' + protester.getEmail() + ')';
                 });
-            }
-        });
+            });
+        }
+
         return results;
     }
 
     // Returns Protesters who are near a Protest
     getUsersNearProtest(protestName: string, radius: number): string[] {
         let results: string[] = [];
-        this.protests.forEach((protest) => {
-            if (protest.getName() === protestName) {
-                protest.getProtesters().forEach((protester) => {
-                    let distance = geolib.getDistance(zipcodeMap[protest.getZipcode()], zipcodeMap[protester.getZipcode()]); // in meters
-                    let distanceInMiles = distance * 0.000621371;
-                    if (distanceInMiles <= radius) {
+        let protests = this.find(this.protests, protestName);
+
+        if (protests.length > 0) {
+            protests.forEach((protest) => {
+                this.protesters.forEach((protester) => {
+                    if (protest.getLocation().isWithinRadius(protester.getLocation().getZipCode(), radius)) {
                         results.push(protester.getName() + ' (' + protester.getEmail() + ')');
                     }
                 });
-            }
-        });
+            });
+        }
+
         return results;
     }
 
-    // Returns Protests near a location, as well as the Movement they are part of
+    // Returns Protests near a location, as well as the Movements they are part of
     getNearbyProtests(zipcode: string, radius: number): string[] {
         let results = [];
 
-        // First, add the protest with no movement to the result
         this.protests.forEach((protest) => {
-            let distance = geolib.getDistance(zipcodeMap[zipcode], zipcodeMap[protest.getZipcode()]); // in meters
-            let distanceInMiles = distance * 0.000621371;
-            if (distanceInMiles <= radius) {
-                let result = {
-                    name: protest.getName(),
-                    movement: 'Not part of a movement'
-                };
+            if (protest.getLocation().isWithinRadius(zipcode, radius)) {
+                let result = protest.getName();
+                let movements = protest.getMovements();
+                if (movements.length <= 0) {
+                    result += " (Not part of any movement)";
+                } else {
+                    result += " (" +  movements.join(", ") + ")";
+                }
                 results.push(result);
             }
         });
 
-        // Then, check if any Protest belongs to a movement.
-        this.movements.forEach((movement) => {
-            movement.getProtests().forEach((protest) => {
-                results.forEach((result) => {
-                   if (result.name === protest.getName()) {
-                        result.movement = movement.getName();
-                   }
-                });
-            });
-        });
-
-        // String it together
-        for (let i = 0; i < results.length; i++) {
-            results[i] = results[i].name + ' (' + results[i].movement + ')';
-        }
         return results;
     }
 
