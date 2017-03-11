@@ -1,0 +1,19 @@
+.flex-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.flex-item {
+    flex-basis: auto;
+}
+
+#forms, #lists {
+    margin: 20px;
+}
+
+.controlsContainer {
+    border: 2px solid black;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 5px;
+}

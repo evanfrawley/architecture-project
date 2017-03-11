@@ -3,12 +3,32 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "main": "index.ts",
   "scripts": {
+    "start": "node build/index.js",
+    "serve": "./node_modules/.bin/webpack-dev-server --inline --open",
+    "build": "./node_modules/.bin/webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Wei-Jen and Evan",
   "license": "MIT",
   "dependencies": {
-    "flux": "^3.1.2"
+    "event-emitter": "^0.3.4",
+    "flux": "^3.1.2",
+    "jquery": "^3.1.1",
+    "react": "^15.4.2",
+    "requirejs": "^2.3.3"
+  },
+  "devDependencies": {
+    "@types/flux": "^3.0.1",
+    "@types/jquery": "^2.0.41",
+    "@types/node": "^7.0.8",
+    "@types/react": "^15.0.16",
+    "@types/requirejs": "^2.1.28",
+    "awesome-typescript-loader": "^3.1.2",
+    "source-map-loader": "^0.2.0",
+    "typescript": "^2.2.1",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.1"
   }
 }

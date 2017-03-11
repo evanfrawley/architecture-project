@@ -4,16 +4,110 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
-    <div id="protesters">
-        <div class="list-container">
-
+    <div id="forms" class="flex-container">
+        <div id="protesters" class="flex-item">
+            <div class="controlsContainer">
+                <form>
+                    <legend>Add a Protester</legend>
+                    <div class="form-group">
+                        <label for="protesterNameInput">Name of Protester</label>
+                        <input type="text" class="form-control" id="protesterNameInput" placeholder="Enter protester name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Protester email address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="protesterZip">Protester ZIP</label>
+                        <input type="text" class="form-control" id="protesterZip" placeholder="Enter ZIP">
+                    </div>
+                    <button id="protesterSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
         </div>
-        <div class="controls-container">
+        <div id="protests" class="flex-item">
+            <div class="controlsContainer">
+                <form>
+                    <legend>Add a Protest</legend>
+                    <div class="form-group">
+                        <label for="protestNameInput">Name of Protest</label>
+                        <input type="text" class="form-control" id="protestNameInput" placeholder="Enter protest name">
+                    </div>
+                    <div class="form-group">
+                        <label for="protestZip">ZIP of Protest</label>
+                        <input type="text" class="form-control" id="protestZip" placeholder="Enter ZIP">
+                    </div>
+                    <div class="form-group">
+                        <label for="dateTime">Date/Time of Protest</label>
+                        <input type="datetime" class="form-control" id="dateTime" placeholder="Enter Date/Time">
+                    </div>
+                    <button id="protestSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <div class="controlsContainer">
+                <form>
+                    <legend>Add a Protester to a Protest</legend>
+                    <div class="form-group">
+                        <label for="protesterToProtest">Name of Protester</label>
+                        <input type="text" class="form-control" id="protesterToProtest" placeholder="Enter protester name">
+                    </div>
+                    <button id="protesterToProtestSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div id="movements" class="flex-item">
+            <div class="controlsContainer">
+                <form>
+                    <legend>Add a Movement</legend>
+                    <div class="form-group">
+                        <label for="movementNameInput">Movement Name</label>
+                        <input type="text" class="form-control" id="movementNameInput" placeholder="Enter movement name">
+                    </div>
+                    <button id="movementSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <div class="controlsContainer">
+                <form>
+                    <legend>Add a Protest to a Movement</legend>
+                    <div class="form-group">
+                        <label for="protestToMovement">Add a Protest to a Movement</label>
+                        <input type="text" class="form-control" id="protestToMovement" placeholder="Enter protest name">
+                    </div>
+                    <button id="protestToMovementSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
 
         </div>
     </div>
+    <div id="lists" class="flex-container">
+        <div class="flex-item">
+            <div class="listContainer">
+                <span>Protesters</span>
+                <ul id="protesterList">
+                    <li>one</li>
+                </ul>
+            </div>
+        </div>
+        <div class="flex-item">
+            <div class="listContainer">
+                <span>Protests</span>
+                <ul id="protestList">
+                    <li>one</li>
+                </ul>
+            </div>
+        </div>
+        <div class="flex-item">
+            <div class="listContainer">
+                <span>Movements</span>
+                <ul id="movementList">
+                    <li>one</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
-<script src="index.ts" type="javascript"></script>
+<script src="dist/bundle.js" type="application/javascript"></script>
 </html>
