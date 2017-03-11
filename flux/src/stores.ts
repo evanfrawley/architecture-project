@@ -13,17 +13,17 @@ class ResistanceStore extends EventEmitter {
   private movements:Movement[] = [];
   private otherList:Protester[] = [];
 
-
   constructor() {
     super();
+
     //register callback (respond to dispatches)
     ResistanceDispatcher.register((payload:Action) => {
+
       let protester;
       let protest;
       let movement;
-      var protesters;
-      var protests;
-      var movements;
+      let zipcode;
+
       switch(payload.actionType){ //switch instead of if/else block
 
         //handle each kind of action
@@ -79,12 +79,17 @@ class ResistanceStore extends EventEmitter {
           break;
 
         case ResistanceAction.GET_PROTESTERS_NEAR_PROTEST:
-          //TODO add something to protesters
+          protest = this.find(this.protests, payload.data.protestName);
+          zipcode = protest.getZipcode();
+          //todo filter function
+          this.otherList = this.protesters;
           this.emit('change');
           break;
 
         case ResistanceAction.GET_PROTESTS_NEAR_LOCATION:
-          //TODO add something to protesters
+          zipcode = payload.data.zipcode;
+          //todo filter function
+          this.otherList = this.protesters;
           this.emit('change');
           break;
       }
@@ -114,6 +119,8 @@ class ResistanceStore extends EventEmitter {
     });
     return filteredArray[0];
   }
+
+
 
 }
 

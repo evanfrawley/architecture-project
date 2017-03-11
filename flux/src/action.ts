@@ -59,15 +59,14 @@ class ResistanceAction {
     ResistanceDispatcher.dispatch(action);
   }
 
-  // add new protester
-  static getProtestersNearProtest(item){
-    let action = new Action(ResistanceAction.GET_PROTESTERS_NEAR_PROTEST, {text:item});
-    ResistanceDispatcher.dispatch(action);
-  }
-
-  // add new protester
-  static getProtestsNearLocation(item){
-    let action = new Action(ResistanceAction.GET_PROTESTS_NEAR_LOCATION, {text:item});
+  // get protester near something
+  static getProtestersNearLocation(location){
+    let action;
+    if(isNaN(parseInt(location))) {
+      action = new Action(ResistanceAction.GET_PROTESTERS_NEAR_PROTEST, {protestName:location});
+    } else {
+      action = new Action(ResistanceAction.GET_PROTESTS_NEAR_LOCATION, {zipcode:location});
+    }
     ResistanceDispatcher.dispatch(action);
   }
 }

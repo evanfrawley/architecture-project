@@ -131,8 +131,6 @@ class ProtesterInputView implements InputView {
     });
   }
 
-
-
   render() { }
 }
 
@@ -170,7 +168,16 @@ class ProtestInputView implements InputView {
       let protestName = $('#protesterAtProtest').val();
       ResistanceAction.getProtestProtesters(protestName);
       this.inputClearer.clear();
+    });
+
+    let getProtestersNearLocation = $('#protesterNearSubmit');
+    getProtestersNearLocation.on('click', (e) => {
+      e.preventDefault();
+      let location = $('#protesterNear').val();
+      ResistanceAction.getProtestersNearLocation(location);
+      this.inputClearer.clear();
     })
+
   }
   render() { }
 }
