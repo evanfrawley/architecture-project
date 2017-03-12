@@ -9,7 +9,6 @@ var ResistanceModel = (function () {
         this.protesters = [];
         this.protests = [];
         this.movements = [];
-        this.observers = [];
     }
     // Register a new protester with the system
     ResistanceModel.prototype.addMember = function (name, email, zipcode) {
@@ -133,10 +132,39 @@ var ResistanceModel = (function () {
         });
         return results;
     };
+    /**
+     * Process the json and construct the objects
+     * @param data json data as string
+     */
     ResistanceModel.prototype.processResistanceData = function (data) {
-        console.log(data);
-        console.log("  Done!");
+        var _this = this;
+        var obj = JSON.parse(data);
+        var protesters = obj.Protesters;
+        var protests = obj.Protests;
+        var movements = obj.Movements;
+        if (protesters.length > 0) {
+            protesters.forEach(function (protester) {
+                var newProtester = new protester_1.Protester(protester.name, protester.email, protester.location.zipcode);
+                _this.protesters.push(newProtester);
+            });
+        }
+        if (protests.length > 0) {
+            protests.forEach(function (protest) {
+                var newProtest = new protest_1.Protest(protest.name, protest.location.zipcode, protest.time, protest.protesters, protest.movements);
+                _this.protests.push(newProtest);
+            });
+        }
+        if (movements.length > 0) {
+            movements.forEach(function (movement) {
+                var newMovement = new movement_1.Movement(movement.name, movement.protests);
+                _this.movements.push(newMovement);
+            });
+        }
     };
+    /**
+     * Save the application data to a json file
+     * @param fileName name of the json file
+     */
     ResistanceModel.prototype.saveResistanceData = function (fileName) {
         var json = '{ \"Protesters\":' + CircularJSON.stringify(this.protesters, null, '\t') + ', \n\t\"Protests\":'
             + CircularJSON.stringify(this.protests, null, '\t')
@@ -157,31 +185,6 @@ var ResistanceModel = (function () {
     };
     ResistanceModel.prototype.getMovements = function () {
         return this.movements;
-    };
-    /**
-     * Adds an Observer.
-     * @param obs The Observer to be added.
-     */
-    ResistanceModel.prototype.register = function (obs) {
-        this.observers.push(obs);
-    };
-    /**
-     * Removes an Observer.
-     * @param obs The Observer to be removed.
-     */
-    ResistanceModel.prototype.unregister = function (obs) {
-        if (this.observers.length != 0) {
-            var index = this.observers.indexOf(obs);
-            if (index > -1) {
-                this.observers.splice(index, 1);
-            }
-        }
-    };
-    /**
-     * Asks all Observers to update themselves.
-     */
-    ResistanceModel.prototype.notifyAll = function () {
-        this.observers.forEach(function (obs) { return obs.notify(); });
     };
     return ResistanceModel;
 }());

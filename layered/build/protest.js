@@ -4,12 +4,12 @@
 "use strict";
 var location_1 = require("./location");
 var Protest = (function () {
-    function Protest(name, zipcode, time) {
+    function Protest(name, zipcode, time, protesters, movements) {
         this.name = name;
         this.location = new location_1.ZcLocation(zipcode);
         this.time = new Date(time);
-        this.protesters = [];
-        this.movements = [];
+        this.protesters = protesters ? protesters : [];
+        this.movements = movements ? movements : [];
     }
     // Change the name or time of the Protest
     Protest.prototype.modify = function (newName, newTime) {

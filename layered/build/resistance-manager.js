@@ -4,7 +4,7 @@
  */
 var ResistanceManager = (function () {
     /**
-     * Constructs a CanvasController
+     * Constructs a ResistanceManager
      * @param model The Model where the information lives
      */
     function ResistanceManager(model) {

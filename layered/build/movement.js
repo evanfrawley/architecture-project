@@ -3,9 +3,9 @@
  */
 "use strict";
 var Movement = (function () {
-    function Movement(name) {
+    function Movement(name, protests) {
         this.name = name;
-        this.protests = [];
+        this.protests = protests ? protests : [];
     }
     // Adds a Protest
     Movement.prototype.addProtest = function (newProtest) {

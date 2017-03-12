@@ -79,11 +79,11 @@ function showNewMemberMenu(rm, rmgr) {
     var name = readlineSync.question('  Name: ');
     var email = readlineSync.question('  Email: ');
     var zip = readlineSync.question('  Zip Code: ');
-    if (rm.addMember(name, email, zip)) {
-        console.log('User added!');
+    if (rmgr.addMember(name, email, zip)) {
+        console.log('  Protester added!');
     }
     else {
-        console.log('An input has failed data validation. Please check your input.');
+        console.log('  An input has failed data validation. Please check your input.');
     }
 }
 /**
@@ -96,10 +96,11 @@ function showNewProtestMenu(rm, rmgr) {
     var date = readlineSync.question('  Date and time (ex: Jan 21 2017 13:00 PST): ');
     var protestName = rmgr.addProtest(newProtestName, zipcode, date);
     if (protestName) {
+        console.log("  Protest added!");
         showAddToProtestMenu(rm, protestName); //add users to new protest
     }
     else {
-        console.log('An input has failed data validation. Please check your input.');
+        console.log('  An input has failed data validation. Please check your input.');
     }
 }
 /**
@@ -110,6 +111,7 @@ function showNewMovementMenu(rm, rmgr) {
     var newMovementName = readlineSync.question('  Title of movement: ');
     var movementName = rmgr.addMovement(newMovementName);
     if (movementName) {
+        console.log("  Movement added!");
         var adding = readlineSync.question('Add protests to movement? (y/n): ');
         while (adding.toLowerCase().startsWith('y')) {
             showAddToMovementMenu(rm, movementName); //add protests to new movement
@@ -117,7 +119,7 @@ function showNewMovementMenu(rm, rmgr) {
         }
     }
     else {
-        console.log('An input has failed data validation. Please check your input.');
+        console.log('  An input has failed data validation. Please check your input.');
     }
 }
 /**
