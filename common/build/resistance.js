@@ -119,7 +119,6 @@ var ResistanceManager = (function () {
                 var result = protest.getName();
                 var movements = protest.getMovements();
                 var movementsInNames = movements.map(function (movement) { return movement.getName(); });
-                console.log(movementsInNames);
                 if (movements.length <= 0) {
                     result += " (Not part of any movement)";
                 }

@@ -1,16 +1,33 @@
+let fs = require('fs');
+let CircularJSON = require('circular-json');
+
 import {Protester} from './protester';
 import {Protest} from './protest';
 import {Movement} from './movement';
 
-export class ResistanceManager {
-    private protests: Protest[];
+// Behaviors for Subjects (publishers from lectures)
+export interface Subject {
+    register(obs:Observer);
+    unregister(obs:Observer);
+    notifyAll();
+}
+
+// Behaviors for Observers (subscribers from lectures)
+export interface Observer {
+    notify();
+}
+
+export class ResistanceModel {
     private protesters: Protester[];
+    private protests: Protest[];
     private movements: Movement[];
+    private observers: Observer[];
 
     constructor() {
-        this.protests = [];
         this.protesters =  [];
+        this.protests = [];
         this.movements = [];
+        this.observers = [];
     }
 
     // Register a new protester with the system
@@ -147,7 +164,6 @@ export class ResistanceManager {
                 let result = protest.getName();
                 let movements = protest.getMovements();
                 let movementsInNames = movements.map((movement) => {return movement.getName()});
-                console.log(movementsInNames);
                 if (movements.length <= 0) {
                     result += " (Not part of any movement)";
                 } else {
@@ -157,6 +173,23 @@ export class ResistanceManager {
             }
         });
         return results;
+    }
+
+    processResistanceData(data: string) {
+        console.log(data);
+        console.log("  Done!");
+    }
+
+    saveResistanceData(fileName: string) {
+        let json: string = '{ \"Protesters\":' + CircularJSON.stringify(this.protesters, null, '\t') + ', \n\t\"Protests\":'
+            + CircularJSON.stringify(this.protests, null, '\t')
+            + ', \n\t\"Movements\":' + CircularJSON.stringify(this.movements, null, '\t') + ' }' ;
+        fs.writeFile(fileName, json,  function(err) {
+            if (err) {
+                return console.error(err);
+            }
+            console.log("Data written successfully!");
+        });
     }
 
     // Getter methods
@@ -170,5 +203,33 @@ export class ResistanceManager {
 
     getMovements(): Movement[] {
         return this.movements;
+    }
+
+    /**
+     * Adds an Observer.
+     * @param obs The Observer to be added.
+     */
+    register(obs:Observer) {
+        this.observers.push(obs);
+    }
+
+    /**
+     * Removes an Observer.
+     * @param obs The Observer to be removed.
+     */
+    unregister(obs:Observer) {
+        if (this.observers.length != 0) {
+            let index = this.observers.indexOf(obs);
+            if (index > -1) {
+                this.observers.splice(index, 1);
+            }
+        }
+    }
+
+    /**
+     * Asks all Observers to update themselves.
+     */
+    notifyAll() {
+        this.observers.forEach((obs) => obs.notify());
     }
 }

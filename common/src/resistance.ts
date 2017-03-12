@@ -147,7 +147,6 @@ export class ResistanceManager {
                 let result = protest.getName();
                 let movements = protest.getMovements();
                 let movementsInNames = movements.map((movement) => {return movement.getName()});
-                console.log(movementsInNames);
                 if (movements.length <= 0) {
                     result += " (Not part of any movement)";
                 } else {

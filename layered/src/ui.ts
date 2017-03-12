@@ -1,22 +1,24 @@
-//User Interface for The Resistance Manager
+//User Interface for The Resistance Manager. Acts as the presentation layer.
 
 let readlineSync = require('readline-sync'); //for easier repeated prompts
 let fs = require('file-system');
 
-import {ResistanceManager} from './resistance';
+import {ResistanceModel} from './resistance-model';
+import {ResistanceManager} from './resistance-manager';
 
 /**
  * Function to run the UI
  */
 export function start() {
   //make a manager and start interacting with it
-  showMainMenu(new ResistanceManager());
+  let rm = new ResistanceModel();
+  showMainMenu(rm, new ResistanceManager(rm));
 }
 
 /**
  * The main menu. Will show until the user exits
  */
-function showMainMenu(rm:ResistanceManager) {
+function showMainMenu(rm:ResistanceModel, rmgr:ResistanceManager) {
   while(true){ //run until we exit
     console.log(`Welcome to the Resistance! Pick an option:
   1. Register a new member
@@ -35,15 +37,21 @@ function showMainMenu(rm:ResistanceManager) {
     if(response === '11' || response.slice(0,2).toLowerCase() === ':q'){
       let saveWork = readlineSync.question('Do you want to save the data? (y/n): ');
       if (saveWork.toLowerCase().startsWith('y')) {
-        console.log("work saved!");
+        const DEFAULT_NAME = 'data.json';
+        let fileName = readlineSync.question(`Please provide the file name (default: ${DEFAULT_NAME}): `); //use default if undefined
+        if (fileName) {
+          rm.saveResistanceData(fileName + '.json');
+        } else {
+          rm.saveResistanceData(DEFAULT_NAME);
+        }
       }
       break; //stop looping, thus leaving method
     }
 
     switch(response) { //handle each response
-      case '1': showNewMemberMenu(rm); break;
-      case '2': showNewProtestMenu(rm); break;
-      case '3': showNewMovementMenu(rm); break;
+      case '1': showNewMemberMenu(rm, rmgr); break;
+      case '2': showNewProtestMenu(rm, rmgr); break;
+      case '3': showNewMovementMenu(rm, rmgr); break;
       case '4': showAddToProtestMenu(rm); break;
       case '5': showModifyProtestMenu(rm); break;
       case '6': showAddToMovementMenu(rm); break;
@@ -62,51 +70,61 @@ function showMainMenu(rm:ResistanceManager) {
 /**
  * Show menu to add a new member
  */
-function showNewMemberMenu(rm:ResistanceManager) {
+function showNewMemberMenu(rm:ResistanceModel, rmgr:ResistanceManager) {
   console.log('Add a new member.');
   let name:string = readlineSync.question('  Name: ');
   let email:string = readlineSync.question('  Email: ');
   let zip:string = readlineSync.question('  Zip Code: ');
 
-  rm.addMember(name, email, zip);
-
-  console.log('User added!');
+  if (rm.addMember(name, email, zip)) {
+    console.log('User added!');
+  } else {
+    console.log('An input has failed data validation. Please check your input.');
+  }
 }
 
 /** 
  * Show menu to add a new protest. Will then show menu to add members to the protest
  */
-function showNewProtestMenu(rm:ResistanceManager) {
+function showNewProtestMenu(rm:ResistanceModel, rmgr:ResistanceManager) {
   console.log('Add a new protest.');
   let newProtestName:string = readlineSync.question('  Title of protest: ');
   let zipcode:string = readlineSync.question('  Location (zip code): ');
   let date:string = readlineSync.question('  Date and time (ex: Jan 21 2017 13:00 PST): ');
 
-  let protestName:string = rm.addProtest(newProtestName, zipcode, date);
+  let protestName:string = rmgr.addProtest(newProtestName, zipcode, date);
 
-  showAddToProtestMenu(rm, protestName); //add users to new protest
+  if (protestName) {
+    showAddToProtestMenu(rm, protestName); //add users to new protest
+  } else {
+    console.log('An input has failed data validation. Please check your input.');
+  }
 }
 
 /**
  * Show menu to add a new movement. Will then show menu to add protests to the movement
  */
-function showNewMovementMenu(rm:ResistanceManager) {
+function showNewMovementMenu(rm:ResistanceModel, rmgr:ResistanceManager) {
   console.log('Add a new movement.');
   let newMovementName:string = readlineSync.question('  Title of movement: ');
 
-  let movementName:string = rm.addMovement(newMovementName);
+  let movementName:string = rmgr.addMovement(newMovementName);
 
-  let adding = readlineSync.question('Add protests to movement? (y/n): ');
-  while(adding.toLowerCase().startsWith('y')){ //while adding members    
-    showAddToMovementMenu(rm, movementName); //add protests to new movement
-    adding = readlineSync.question('Add another protest? (y/n): ');
+  if (movementName) {
+    let adding = readlineSync.question('Add protests to movement? (y/n): ');
+    while(adding.toLowerCase().startsWith('y')){ //while adding members
+      showAddToMovementMenu(rm, movementName); //add protests to new movement
+      adding = readlineSync.question('Add another protest? (y/n): ');
+    }
+  } else {
+    console.log('An input has failed data validation. Please check your input.');
   }
 }
 
 /**
  * Show menu to add a member to a protest. Will repeat to add multiple members. Will show menu to search for a protest if none is provided.
  */
-function showAddToProtestMenu(rm:ResistanceManager, protestName?:string) {
+function showAddToProtestMenu(rm:ResistanceModel, protestName?:string) {
   if(!protestName){
     protestName = showSearchProtestsMenu(rm);
     if(!protestName){ return }//if didn't select a protest
@@ -127,27 +145,27 @@ function showAddToProtestMenu(rm:ResistanceManager, protestName?:string) {
 /**
  * Show menu to look up a member. Will return undefined if no member selected.
  */
-function showSearchMembersMenu(rm:ResistanceManager) : string|undefined {
+function showSearchMembersMenu(rm:ResistanceModel) : string|undefined {
   return _searchListMenu('member', (q) => rm.findMemberNames(q));
 }
 
 /**
  * Show menu to look up a protest. Will return undefined if no protest selected.
  */
-function showSearchProtestsMenu(rm:ResistanceManager) : string|undefined {
+function showSearchProtestsMenu(rm:ResistanceModel) : string|undefined {
   return _searchListMenu('protest', (q) => rm.findProtestNames(q));
 }
 
 /**
  * Show menu to look up a movement. Will return undefined if no movement selected.
  */
-function showSearchMovementsMenu(rm:ResistanceManager) : string|undefined {
+function showSearchMovementsMenu(rm:ResistanceModel) : string|undefined {
   return _searchListMenu('movement', (q) => rm.findMovementNames(q));
 }
 
 /**
  * Helper function that shows a menu to search a list of items and choose a result.
- * Will return undefiend if no item is selected
+ * Will return undefined if no item is selected
  */
 function _searchListMenu(type:string, searchCallback:(query:string) => string[]) : string|undefined {
   console.log(`Searching for a ${type}.`);
@@ -171,7 +189,7 @@ function _searchListMenu(type:string, searchCallback:(query:string) => string[])
 /**
  * Show menu to modify protest (title, time, or movement). Will show menu to search for a protest if none is provided.
  */
-function showModifyProtestMenu(rm:ResistanceManager, protestName?:string) {
+function showModifyProtestMenu(rm:ResistanceModel, protestName?:string) {
   if(!protestName){
     protestName = showSearchProtestsMenu(rm);
     if(!protestName){ return }//if didn't select a protest
@@ -206,7 +224,7 @@ function showModifyProtestMenu(rm:ResistanceManager, protestName?:string) {
 /**
  * Show menu to add a protest to a movement. Will show menus to search for a protest and a movement if either is not provided.
  */
-function showAddToMovementMenu(rm:ResistanceManager, movementName?:string, protestName?:string, ) {
+function showAddToMovementMenu(rm:ResistanceModel, movementName?:string, protestName?:string, ) {
   if(!protestName){ //if protest not yet specified
     protestName = showSearchProtestsMenu(rm);
     if(!protestName){ return }//if didn't select a protest
@@ -224,7 +242,7 @@ function showAddToMovementMenu(rm:ResistanceManager, movementName?:string, prote
 /**
  * Show a list of members participating in a protest. Will show menu to search for a protest. Should include outputting member's email addresses.
  */
-function showListProtestersMenu(rm:ResistanceManager) {
+function showListProtestersMenu(rm:ResistanceModel) {
   let protestName = showSearchProtestsMenu(rm);
 
   let members = rm.getProtesters(protestName);
@@ -238,7 +256,7 @@ function showListProtestersMenu(rm:ResistanceManager) {
 /**
  * Show a list of members geographically near to a protest. Will show menu to search for a protest. Should include outputting member's email addresses.
  */
-function showListNearbyMembersMenu(rm:ResistanceManager) {
+function showListNearbyMembersMenu(rm:ResistanceModel) {
   let protestName = showSearchProtestsMenu(rm);
 
   const DEFAULT_DISTANCE = 20; 
@@ -255,7 +273,7 @@ function showListNearbyMembersMenu(rm:ResistanceManager) {
 /**
  * Show a list of protests geographically near the given zip code. Displayed protests should list any movements they are a part of.
  */
-function showListNearbyProtestsMenu(rm:ResistanceManager) {
+function showListNearbyProtestsMenu(rm:ResistanceModel) {
   let zip:string = readlineSync.question('Zip code to search near: ');
 
   const DEFAULT_DISTANCE = 50; 
@@ -272,9 +290,12 @@ function showListNearbyProtestsMenu(rm:ResistanceManager) {
 /**
  * Loads existing resistance data
  */
-function showLoadExistingResistanceDataMenu(rm:ResistanceManager) {
+function showLoadExistingResistanceDataMenu(rm:ResistanceModel) {
   let fileName = readlineSync.question('  File Name: ');
+  console.log('  Reading in ' + fileName + '.json...');
 
+  var data = fs.readFileSync(fileName + '.json');
+  rm.processResistanceData(data.toString());
 
-  readlineSync.keyInPause('(Press any letter to continue)', {guide:false}); //so have time to read stuf
+  readlineSync.keyInPause('(Press any letter to continue)', {guide:false}); //so have time to read stuff
 }

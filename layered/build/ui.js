@@ -1,39 +1,48 @@
-//User Interface for The Resistance Manager
+//User Interface for The Resistance Manager. Acts as the presentation layer.
 "use strict";
 var readlineSync = require('readline-sync'); //for easier repeated prompts
 var fs = require('file-system');
-var resistance_1 = require("./resistance");
+var resistance_model_1 = require("./resistance-model");
+var resistance_manager_1 = require("./resistance-manager");
 /**
  * Function to run the UI
  */
 function start() {
     //make a manager and start interacting with it
-    showMainMenu(new resistance_1.ResistanceManager());
+    var rm = new resistance_model_1.ResistanceModel();
+    showMainMenu(rm, new resistance_manager_1.ResistanceManager(rm));
 }
 exports.start = start;
 /**
  * The main menu. Will show until the user exits
  */
-function showMainMenu(rm) {
+function showMainMenu(rm, rmgr) {
     while (true) {
         console.log("Welcome to the Resistance! Pick an option:\n  1. Register a new member\n  2. Register a new protest\n  3. Register a new movement\n  4. Add a member to a protest\n  5. Modify a protest\n  6. Add a protest to a movement\n  7. List protest members\n  8. List members near a protest\n  9. List protests near a location\n  10. Load in existing resistance data\n  11. Exit");
         var response = readlineSync.question('> ');
         if (response === '11' || response.slice(0, 2).toLowerCase() === ':q') {
             var saveWork = readlineSync.question('Do you want to save the data? (y/n): ');
             if (saveWork.toLowerCase().startsWith('y')) {
-                console.log("work saved!");
+                var DEFAULT_NAME = 'data.json';
+                var fileName = readlineSync.question("Please provide the file name (default: " + DEFAULT_NAME + "): "); //use default if undefined
+                if (fileName) {
+                    rm.saveResistanceData(fileName + '.json');
+                }
+                else {
+                    rm.saveResistanceData(DEFAULT_NAME);
+                }
             }
             break; //stop looping, thus leaving method
         }
         switch (response) {
             case '1':
-                showNewMemberMenu(rm);
+                showNewMemberMenu(rm, rmgr);
                 break;
             case '2':
-                showNewProtestMenu(rm);
+                showNewProtestMenu(rm, rmgr);
                 break;
             case '3':
-                showNewMovementMenu(rm);
+                showNewMovementMenu(rm, rmgr);
                 break;
             case '4':
                 showAddToProtestMenu(rm);
@@ -65,36 +74,50 @@ function showMainMenu(rm) {
 /**
  * Show menu to add a new member
  */
-function showNewMemberMenu(rm) {
+function showNewMemberMenu(rm, rmgr) {
     console.log('Add a new member.');
     var name = readlineSync.question('  Name: ');
     var email = readlineSync.question('  Email: ');
     var zip = readlineSync.question('  Zip Code: ');
-    rm.addMember(name, email, zip);
-    console.log('User added!');
+    if (rm.addMember(name, email, zip)) {
+        console.log('User added!');
+    }
+    else {
+        console.log('An input has failed data validation. Please check your input.');
+    }
 }
 /**
  * Show menu to add a new protest. Will then show menu to add members to the protest
  */
-function showNewProtestMenu(rm) {
+function showNewProtestMenu(rm, rmgr) {
     console.log('Add a new protest.');
     var newProtestName = readlineSync.question('  Title of protest: ');
     var zipcode = readlineSync.question('  Location (zip code): ');
     var date = readlineSync.question('  Date and time (ex: Jan 21 2017 13:00 PST): ');
-    var protestName = rm.addProtest(newProtestName, zipcode, date);
-    showAddToProtestMenu(rm, protestName); //add users to new protest
+    var protestName = rmgr.addProtest(newProtestName, zipcode, date);
+    if (protestName) {
+        showAddToProtestMenu(rm, protestName); //add users to new protest
+    }
+    else {
+        console.log('An input has failed data validation. Please check your input.');
+    }
 }
 /**
  * Show menu to add a new movement. Will then show menu to add protests to the movement
  */
-function showNewMovementMenu(rm) {
+function showNewMovementMenu(rm, rmgr) {
     console.log('Add a new movement.');
     var newMovementName = readlineSync.question('  Title of movement: ');
-    var movementName = rm.addMovement(newMovementName);
-    var adding = readlineSync.question('Add protests to movement? (y/n): ');
-    while (adding.toLowerCase().startsWith('y')) {
-        showAddToMovementMenu(rm, movementName); //add protests to new movement
-        adding = readlineSync.question('Add another protest? (y/n): ');
+    var movementName = rmgr.addMovement(newMovementName);
+    if (movementName) {
+        var adding = readlineSync.question('Add protests to movement? (y/n): ');
+        while (adding.toLowerCase().startsWith('y')) {
+            showAddToMovementMenu(rm, movementName); //add protests to new movement
+            adding = readlineSync.question('Add another protest? (y/n): ');
+        }
+    }
+    else {
+        console.log('An input has failed data validation. Please check your input.');
     }
 }
 /**
@@ -139,7 +162,7 @@ function showSearchMovementsMenu(rm) {
 }
 /**
  * Helper function that shows a menu to search a list of items and choose a result.
- * Will return undefiend if no item is selected
+ * Will return undefined if no item is selected
  */
 function _searchListMenu(type, searchCallback) {
     console.log("Searching for a " + type + ".");
@@ -247,5 +270,8 @@ function showListNearbyProtestsMenu(rm) {
  */
 function showLoadExistingResistanceDataMenu(rm) {
     var fileName = readlineSync.question('  File Name: ');
-    readlineSync.keyInPause('(Press any letter to continue)', { guide: false }); //so have time to read stuf
+    console.log('  Reading in ' + fileName + '.json...');
+    var data = fs.readFileSync(fileName + '.json');
+    rm.processResistanceData(data.toString());
+    readlineSync.keyInPause('(Press any letter to continue)', { guide: false }); //so have time to read stuff
 }

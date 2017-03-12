@@ -2,9 +2,9 @@
  * Created by Wei-Jen on 1/21/17.
  */
 
-import {ResistanceManager} from './resistance';
+import {ResistanceModel} from './resistance-model';
 
-let manager = new ResistanceManager();
+let manager = new ResistanceModel();
 
 console.log('Checking addMember');
 manager.addMember('Ada', 'ada@email.com', '98195');
