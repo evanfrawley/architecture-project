@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="src/styles/index.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="headerContent">
+        <h1>Flux Architecture Project</h1>
+        <p>Hiya, so this is my flux architecture assignment. To work with it, just manually enter stuff, and see if change in the lists below (scroll down)! The other output list is for when you want to query for protesters at or near stuff. You're also able to open a new tab and have another different instance of the Resistance Manager. Things to keep in mind: The lists below show the state of the app, and also show nested values, if you are to add protesters to protests, or protests to movements.</p>
+    </div>
+    <div id="forms" class="flex-container">
+        <div id="protestersContainer" class="flex-item">
+            <div class="controlsContainer">
+                <form>
+                    <legend>Add a Protester</legend>
+                    <div class="form-group">
+                        <label for="protesterNameInput">Name</label>
+                        <input type="text" class="form-control" id="protesterNameInput" placeholder="Evan..">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="evan@...">
+                    </div>
+                    <div class="form-group">
+                        <label for="protesterZip">ZIP</label>
+                        <input type="text" pattern="[0-9]{5}" class="form-control" id="protesterZip" placeholder="98105">
+                    </div>
+                    <button id="protesterSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div id="protestsContainer" class="flex-item">
+            <div class="controlsContainer">
+                <form>
+                    <legend>Add a Protest</legend>
+                    <div class="form-group">
+                        <label for="protestNameInput">Name</label>
+                        <input type="text" class="form-control" id="protestNameInput" placeholder="March A..">
+                    </div>
+                    <div class="form-group">
+                        <label for="protestZip">ZIP</label>
+                        <input type="text" pattern="[0-9]{5}" class="form-control" id="protestZip" placeholder="98105">
+                    </div>
+                    <div class="form-group">
+                        <label for="dateTime">Date/Time</label>
+                        <input type="datetime" class="form-control" id="dateTime" placeholder="3/12/2017">
+                    </div>
+                    <button id="protestSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div id="movementsContainer" class="flex-item">
+            <div class="controlsContainer">
+                <form>
+                    <legend>Add a Movement</legend>
+                    <div class="form-group">
+                        <label for="movementNameInput">Name</label>
+                        <input type="text" class="form-control" id="movementNameInput" placeholder="BLM">
+                    </div>
+                    <button id="movementSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+        <div id="protesterToProtestContainer" class="flex-item">
+            <div class="controlsContainer">
+                <form>
+                    <legend>Add a Protester to a Protest</legend>
+                    <div class="form-group">
+                        <label for="protesterToProtest">Protester Name</label>
+                        <input type="text" class="form-control" id="protesterToProtest" placeholder="Evan...">
+                    </div>
+                    <div class="form-group">
+                        <label for="protestReceiving">Protest Name</label>
+                        <input type="text" class="form-control" id="protestReceiving" placeholder="March A...">
+                    </div>
+                    <button id="protesterToProtestSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div id="protestToMovementContainer" class="flex-item">
+            <div class="controlsContainer">
+                <form>
+                    <legend>Add a Protest to a Movement</legend>
+                    <div class="form-group">
+                        <label for="protestToMovement">Protest Name</label>
+                        <input type="text" class="form-control" id="protestToMovement" placeholder="March A...">
+                    </div>
+                    <div class="form-group">
+                        <label for="movementReceiving">Movement Name</label>
+                        <input type="text" class="form-control" id="movementReceiving" placeholder="BLM...">
+                    </div>
+                    <button id="protestToMovementSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div id="getProtestersAtProtestContainer" class="flex-item">
+            <div class="controlsContainer">
+                <form>
+                    <legend>Get Protesters @ Protest</legend>
+                    <div class="form-group">
+                        <label for="protesterAtProtest">Protest Name</label>
+                        <input type="text" class="form-control" id="protesterAtProtest" placeholder="March A...">
+                    </div>
+                    <button id="protesterAtProtestSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div id="getProtestersNearLocationContainer" class="flex-item">
+            <div class="controlsContainer">
+                <form>
+                    <legend>Get Protesters Near</legend>
+                    <div class="form-group">
+                        <label for="protesterNear">Name of Protest or ZIP</label>
+                        <input type="text" class="form-control" id="protesterNear" placeholder="98105 / March A..">
+                    </div>
+                    <div class="form-group">
+                        <label for="protesterNearRadius">Radius from location (miles)</label>
+                        <input type="number" class="form-control" id="protesterNearRadius" placeholder="50">
+                    </div>
+                    <button id="protesterNearSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div id="modifyOldNameContainer" class="flex-item">
+            <div class="controlsContainer">
+                <form>
+                    <legend>Modify a Protest</legend>
+                    <div class="form-group">
+                        <label for="modifyOldName">Current Protester Name</label>
+                        <input type="text" class="form-control" id="modifyOldName" placeholder="March A...">
+                    </div>
+                    <div class="form-group">
+                        <label for="modifyNewName">New Protest Name</label>
+                        <input type="text" class="form-control" id="modifyNewName" placeholder="(optional)">
+                    </div>
+                    <div class="form-group">
+                        <label for="modifyNewTime">New Protest Time</label>
+                        <input type="text" class="form-control" id="modifyNewTime" placeholder="(optional)">
+                    </div>
+                    <button id="modifyProtestSubmit"  class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="lists" class="flex-container">
+        <div class="flex-item">
+            <div class="listContainer">
+                <h2>Protesters</h2>
+                <ul id="protesterList">
+                </ul>
+            </div>
+        </div>
+        <div class="flex-item">
+            <div class="listContainer">
+                <h2>Protests</h2>
+                <ul id="protestList">
+                </ul>
+            </div>
+        </div>
+        <div class="flex-item">
+            <div class="listContainer">
+                <h2>Movements</h2>
+                <ul id="movementList">
+                </ul>
+            </div>
+        </div>
+        <div class="flex-item">
+            <div class="listContainer">
+                <h2>Other Output List</h2>
+                <ul id="otherList">
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="dist/bundle.js" type="application/javascript"></script>
+</html>

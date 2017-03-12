@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "outDir": "build/",
+        "alwaysStrict": true,
+        "compileOnSave":false,
+        "types": [
+            "node"
+        ],
+        "exclude": [
+            "node_modules"
+        ]
+    }
+}
