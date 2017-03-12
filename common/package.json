@@ -1,0 +1,16 @@
+{
+  "name": "common",
+  "version": "1.0.0",
+  "description": "homework 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wei-Jen and Evan",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^6.0.58",
+    "geolib": "^2.0.22",
+    "readline-sync": "^1.4.5"
+  }
+}
