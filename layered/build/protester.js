@@ -4,6 +4,12 @@
 "use strict";
 var location_1 = require("./location");
 var Protester = (function () {
+    /**
+     * Constructs a Protester
+     * @param name
+     * @param email
+     * @param zipcode
+     */
     function Protester(name, email, zipcode) {
         this.name = name;
         this.email = email;

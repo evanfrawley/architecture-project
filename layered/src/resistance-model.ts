@@ -5,49 +5,54 @@ import {Protester} from './protester';
 import {Protest} from './protest';
 import {Movement} from './movement';
 
-// Behaviors for Subjects (publishers from lectures)
-export interface Subject {
-    register(obs:Observer);
-    unregister(obs:Observer);
-    notifyAll();
-}
-
-// Behaviors for Observers (subscribers from lectures)
-export interface Observer {
-    notify();
-}
-
 export class ResistanceModel {
     private protesters: Protester[];
     private protests: Protest[];
     private movements: Movement[];
-    private observers: Observer[];
 
     constructor() {
         this.protesters =  [];
         this.protests = [];
         this.movements = [];
-        this.observers = [];
     }
 
-    // Register a new protester with the system
+    /**
+     * Registers a new protester with the system
+     * @param name
+     * @param email
+     * @param zipcode
+     */
     addMember(name: string, email: string, zipcode: string) {
         this.protesters.push(new Protester(name, email, zipcode));
     }
 
-    // Register a new protest with the system
+    /**
+     *  Register a new protest with the system
+     * @param newName
+     * @param zipcode
+     * @param time
+     * @return {string} name of the new protest
+     */
     addProtest(newName: string, zipcode: string, time: string): string {
         this.protests.push(new Protest(newName, zipcode, time));
         return newName;
     }
 
-    // Register a new movement with the system
+    /**
+     * Register a new movement with the system
+     * @param newName
+     * @return {string} name of the new movement
+     */
     addMovement(newName: string) {
         this.movements.push(new Movement(newName));
         return newName;
     }
 
-    // Adds a Protester to a Protest
+    /**
+     * Adds a Protester to a Protest
+     * @param memberName
+     * @param protestName
+     */
     addMemberToProtest(memberName: string, protestName: string) {
         // Find the protester
         let protesters = this.find(this.protesters, memberName);
@@ -64,17 +69,29 @@ export class ResistanceModel {
         }
     }
 
-    // Returns Protesters in the system who match the search string
+    /**
+     * Returns Protesters in the system who match the search string
+     * @param searchName
+     * @return {string[]} an array of matches
+     */
     findMemberNames(searchName: string): string[] {
         return this.find(this.protesters, searchName).map((item) => { return item.getName()});
     }
 
-    //  Returns Protests in the system that match the search string
+    /**
+     * Returns Protests in the system that match the search string
+     * @param searchName
+     * @return {string[]} an array of matches
+     */
     findProtestNames(searchName: string): string[] {
         return this.find(this.protests, searchName).map((item) => { return item.getName()});
     }
 
-    //  Returns Movements in the system that match the search string
+    /**
+     * Returns Movements in the system that match the search string
+     * @param searchName
+     * @return {string[]} an array of matches
+     */
     findMovementNames(searchName: string): string[] {
         return this.find(this.movements, searchName).map((item) => { return item.getName()});
     }
@@ -90,7 +107,12 @@ export class ResistanceModel {
         return results;
     }
 
-    // Alters the name and/or the time of the protest
+    /**
+     * Alters the name and/or the time of the protest
+     * @param name name of the protest to look for
+     * @param newName
+     * @param newTime
+     */
     modifyProtest(name: string, newName?: string, newTime?: string) {
         // Only fires when either newName or newTime is defined, otherwise no point in modifying
         if (newName || newTime) {
@@ -106,7 +128,11 @@ export class ResistanceModel {
         }
     }
 
-    // Adds a Protest to a Movement
+    /**
+     * Adds a Protest to a Movement
+     * @param protestName
+     * @param movementName
+     */
     addProtestToMovement(protestName: string, movementName: string) {
         let protests = this.find(this.protests, protestName);
 
@@ -122,7 +148,11 @@ export class ResistanceModel {
         }
     }
 
-    // Returns all the Protesters involved in a Protest and their email addresses
+    /**
+     * Returns all the Protesters involved in a Protest and their email addresses.
+     * @param protestName
+     * @return {string[]} An array of protesters' names and email addresses
+     */
     getProtesters(protestName: string): string[] {
         let results = this.find(this.protests, protestName);
 
@@ -137,7 +167,12 @@ export class ResistanceModel {
         return results;
     }
 
-    // Returns Protesters who are near a Protest
+    /**
+     * Returns Protesters who are near a Protest
+     * @param protestName
+     * @param radius
+     * @return {string[]} an array of matches
+     */
     getUsersNearProtest(protestName: string, radius: number): string[] {
         let results: string[] = [];
         let protests = this.find(this.protests, protestName);
@@ -155,9 +190,14 @@ export class ResistanceModel {
         return results;
     }
 
-    // Returns Protests near a location, as well as the Movements they are part of
+    /**
+     * Returns Protests near a location, as well as the Movements they are part of
+     * @param zipcode
+     * @param radius
+     * @return {string[]} an array of matches
+     */
     getNearbyProtests(zipcode: string, radius: number): string[] {
-        let results = [];
+        let results: string[] = [];
 
         this.protests.forEach((protest) => {
             if (protest.getLocation().isWithinRadius(zipcode, radius)) {
@@ -175,11 +215,43 @@ export class ResistanceModel {
         return results;
     }
 
+    /**
+     * Process the json and construct the objects
+     * @param data json data as string
+     */
     processResistanceData(data: string) {
-        console.log(data);
-        console.log("  Done!");
+        let obj = JSON.parse(data);
+        let protesters = obj.Protesters;
+        let protests = obj.Protests;
+        let movements = obj.Movements;
+
+        if (protesters.length > 0) {
+            protesters.forEach((protester) => {
+                let newProtester = new Protester(protester.name, protester.email, protester.location.zipcode);
+                this.protesters.push(newProtester);
+            });
+        }
+
+        if (protests.length > 0) {
+            protests.forEach((protest) => {
+                let newProtest = new Protest(protest.name, protest.location.zipcode, protest.time, protest.protesters, protest.movements);
+                this.protests.push(newProtest);
+            });
+        }
+
+        if (movements.length > 0) {
+            movements.forEach((movement) => {
+                let newMovement = new Movement(movement.name, movement.protests);
+                this.movements.push(newMovement);
+
+            });
+        }
     }
 
+    /**
+     * Save the application data to a json file
+     * @param fileName name of the json file
+     */
     saveResistanceData(fileName: string) {
         let json: string = '{ \"Protesters\":' + CircularJSON.stringify(this.protesters, null, '\t') + ', \n\t\"Protests\":'
             + CircularJSON.stringify(this.protests, null, '\t')
@@ -203,33 +275,5 @@ export class ResistanceModel {
 
     getMovements(): Movement[] {
         return this.movements;
-    }
-
-    /**
-     * Adds an Observer.
-     * @param obs The Observer to be added.
-     */
-    register(obs:Observer) {
-        this.observers.push(obs);
-    }
-
-    /**
-     * Removes an Observer.
-     * @param obs The Observer to be removed.
-     */
-    unregister(obs:Observer) {
-        if (this.observers.length != 0) {
-            let index = this.observers.indexOf(obs);
-            if (index > -1) {
-                this.observers.splice(index, 1);
-            }
-        }
-    }
-
-    /**
-     * Asks all Observers to update themselves.
-     */
-    notifyAll() {
-        this.observers.forEach((obs) => obs.notify());
     }
 }

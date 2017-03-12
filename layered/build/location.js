@@ -5,6 +5,10 @@
 var zipcodeMap = require('../../data/zipcode-locations.json');
 var geolib = require('geolib');
 var ZcLocation = (function () {
+    /**
+     * Construct a ZcLocation
+     * @param zipcode
+     */
     function ZcLocation(zipcode) {
         this.zipcode = zipcode;
     }

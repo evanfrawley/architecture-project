@@ -4,6 +4,14 @@
 "use strict";
 var location_1 = require("./location");
 var Protest = (function () {
+    /**
+     * Constructs a Protest
+     * @param name
+     * @param zipcode
+     * @param time
+     * @param protesters
+     * @param movements
+     */
     function Protest(name, zipcode, time, protesters, movements) {
         this.name = name;
         this.location = new location_1.ZcLocation(zipcode);
@@ -11,7 +19,11 @@ var Protest = (function () {
         this.protesters = protesters ? protesters : [];
         this.movements = movements ? movements : [];
     }
-    // Change the name or time of the Protest
+    /**
+     * Change the name or time of the Protest
+     * @param newName
+     * @param newTime
+     */
     Protest.prototype.modify = function (newName, newTime) {
         if (newName) {
             this.name = newName;
@@ -20,7 +32,10 @@ var Protest = (function () {
             this.time = new Date(newTime);
         }
     };
-    // Adds a Protester
+    /**
+     * Adds a Protester
+     * @param newProtester
+     */
     Protest.prototype.addProtester = function (newProtester) {
         // If the name already exists, bail out.
         for (var i = 0; i < this.protesters.length; i++) {
@@ -30,7 +45,10 @@ var Protest = (function () {
         }
         this.protesters.push(newProtester);
     };
-    // Adds a Movement
+    /**
+     * Adds a Movement
+     * @param newMovement
+     */
     Protest.prototype.addMovement = function (newMovement) {
         // If the name already exists, bail out.
         for (var i = 0; i < this.movements.length; i++) {

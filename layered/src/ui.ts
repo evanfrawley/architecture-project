@@ -76,10 +76,10 @@ function showNewMemberMenu(rm:ResistanceModel, rmgr:ResistanceManager) {
   let email:string = readlineSync.question('  Email: ');
   let zip:string = readlineSync.question('  Zip Code: ');
 
-  if (rm.addMember(name, email, zip)) {
-    console.log('User added!');
+  if (rmgr.addMember(name, email, zip)) {
+    console.log('  Protester added!');
   } else {
-    console.log('An input has failed data validation. Please check your input.');
+    console.log('  An input has failed data validation. Please check your input.');
   }
 }
 
@@ -95,9 +95,10 @@ function showNewProtestMenu(rm:ResistanceModel, rmgr:ResistanceManager) {
   let protestName:string = rmgr.addProtest(newProtestName, zipcode, date);
 
   if (protestName) {
+    console.log("  Protest added!");
     showAddToProtestMenu(rm, protestName); //add users to new protest
   } else {
-    console.log('An input has failed data validation. Please check your input.');
+    console.log('  An input has failed data validation. Please check your input.');
   }
 }
 
@@ -111,13 +112,14 @@ function showNewMovementMenu(rm:ResistanceModel, rmgr:ResistanceManager) {
   let movementName:string = rmgr.addMovement(newMovementName);
 
   if (movementName) {
+    console.log("  Movement added!");
     let adding = readlineSync.question('Add protests to movement? (y/n): ');
     while(adding.toLowerCase().startsWith('y')){ //while adding members
       showAddToMovementMenu(rm, movementName); //add protests to new movement
       adding = readlineSync.question('Add another protest? (y/n): ');
     }
   } else {
-    console.log('An input has failed data validation. Please check your input.');
+    console.log('  An input has failed data validation. Please check your input.');
   }
 }
 

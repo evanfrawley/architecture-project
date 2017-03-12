@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Controller for the command-line view.
+ * Manager for the command-line view.
  */
 var ResistanceManager = (function () {
     /**

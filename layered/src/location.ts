@@ -7,6 +7,10 @@ let geolib = require('geolib');
 export class ZcLocation {
     private zipcode: string;
 
+    /**
+     * Construct a ZcLocation
+     * @param zipcode
+     */
     constructor(zipcode: string) {
         this.zipcode = zipcode;
     }

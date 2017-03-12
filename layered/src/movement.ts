@@ -8,12 +8,20 @@ export class Movement {
     private name: string;
     private protests: Protest[];
 
-    constructor(name: string) {
+    /**
+     * Constructs a new Movement
+     * @param name
+     * @param protests
+     */
+    constructor(name: string, protests?: Protest[]) {
         this.name = name;
-        this.protests = [];
+        this.protests = protests ? protests : [];
     }
 
-    // Adds a Protest
+    /**
+     * Adds a Protest belonging to this Movement
+     * @param newProtest
+     */
     addProtest(newProtest: Protest) {
         for (let i = 0; i < this.protests.length; i++) {
             if (this.protests[i].getName() === newProtest.getName()) {

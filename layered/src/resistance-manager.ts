@@ -4,13 +4,13 @@
 import {ResistanceModel} from './resistance-model';
 
 /**
- * Controller for the command-line view.
+ * Manager for the command-line view.
  */
 export class ResistanceManager {
     private model: ResistanceModel;
 
     /**
-     * Constructs a CanvasController
+     * Constructs a ResistanceManager
      * @param model The Model where the information lives
      */
     constructor(model:ResistanceModel) {

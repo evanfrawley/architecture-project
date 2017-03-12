@@ -13,15 +13,27 @@ import {ZcLocation} from "./location";
     private protesters: Protester[];
     private movements: Movement[];
 
-    constructor(name: string, zipcode?: string, time?: string) {
+     /**
+      * Constructs a Protest
+      * @param name
+      * @param zipcode
+      * @param time
+      * @param protesters
+      * @param movements
+      */
+    constructor(name: string, zipcode?: string, time?: string, protesters?: Protester[], movements?: Movement[]) {
         this.name = name;
         this.location = new ZcLocation(zipcode);
         this.time = new Date(time);
-        this.protesters = [];
-        this.movements = [];
+        this.protesters = protesters ? protesters : [];
+        this.movements = movements ? movements : [];
     }
 
-    // Change the name or time of the Protest
+     /**
+      * Change the name or time of the Protest
+      * @param newName
+      * @param newTime
+      */
     modify(newName?: string, newTime?: string) {
         if (newName) {
             this.name = newName;
@@ -31,7 +43,10 @@ import {ZcLocation} from "./location";
         }
     }
 
-    // Adds a Protester
+     /**
+      * Adds a Protester
+      * @param newProtester
+      */
     addProtester(newProtester: Protester) {
         // If the name already exists, bail out.
         for (let i = 0; i < this.protesters.length; i++) {
@@ -43,7 +58,10 @@ import {ZcLocation} from "./location";
         this.protesters.push(newProtester);
     }
 
-    // Adds a Movement
+     /**
+      * Adds a Movement
+      * @param newMovement
+      */
     addMovement(newMovement: Movement) {
         // If the name already exists, bail out.
         for (let i = 0; i < this.movements.length; i++) {

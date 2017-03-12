@@ -10,21 +10,40 @@ var ResistanceModel = (function () {
         this.protests = [];
         this.movements = [];
     }
-    // Register a new protester with the system
+    /**
+     * Registers a new protester with the system
+     * @param name
+     * @param email
+     * @param zipcode
+     */
     ResistanceModel.prototype.addMember = function (name, email, zipcode) {
         this.protesters.push(new protester_1.Protester(name, email, zipcode));
     };
-    // Register a new protest with the system
+    /**
+     *  Register a new protest with the system
+     * @param newName
+     * @param zipcode
+     * @param time
+     * @return {string} name of the new protest
+     */
     ResistanceModel.prototype.addProtest = function (newName, zipcode, time) {
         this.protests.push(new protest_1.Protest(newName, zipcode, time));
         return newName;
     };
-    // Register a new movement with the system
+    /**
+     * Register a new movement with the system
+     * @param newName
+     * @return {string} name of the new movement
+     */
     ResistanceModel.prototype.addMovement = function (newName) {
         this.movements.push(new movement_1.Movement(newName));
         return newName;
     };
-    // Adds a Protester to a Protest
+    /**
+     * Adds a Protester to a Protest
+     * @param memberName
+     * @param protestName
+     */
     ResistanceModel.prototype.addMemberToProtest = function (memberName, protestName) {
         // Find the protester
         var protesters = this.find(this.protesters, memberName);
@@ -38,15 +57,27 @@ var ResistanceModel = (function () {
             });
         }
     };
-    // Returns Protesters in the system who match the search string
+    /**
+     * Returns Protesters in the system who match the search string
+     * @param searchName
+     * @return {string[]} an array of matches
+     */
     ResistanceModel.prototype.findMemberNames = function (searchName) {
         return this.find(this.protesters, searchName).map(function (item) { return item.getName(); });
     };
-    //  Returns Protests in the system that match the search string
+    /**
+     * Returns Protests in the system that match the search string
+     * @param searchName
+     * @return {string[]} an array of matches
+     */
     ResistanceModel.prototype.findProtestNames = function (searchName) {
         return this.find(this.protests, searchName).map(function (item) { return item.getName(); });
     };
-    //  Returns Movements in the system that match the search string
+    /**
+     * Returns Movements in the system that match the search string
+     * @param searchName
+     * @return {string[]} an array of matches
+     */
     ResistanceModel.prototype.findMovementNames = function (searchName) {
         return this.find(this.movements, searchName).map(function (item) { return item.getName(); });
     };
@@ -60,7 +91,12 @@ var ResistanceModel = (function () {
         });
         return results;
     };
-    // Alters the name and/or the time of the protest
+    /**
+     * Alters the name and/or the time of the protest
+     * @param name name of the protest to look for
+     * @param newName
+     * @param newTime
+     */
     ResistanceModel.prototype.modifyProtest = function (name, newName, newTime) {
         // Only fires when either newName or newTime is defined, otherwise no point in modifying
         if (newName || newTime) {
@@ -72,7 +108,11 @@ var ResistanceModel = (function () {
             protests[0].modify(newName, newTime);
         }
     };
-    // Adds a Protest to a Movement
+    /**
+     * Adds a Protest to a Movement
+     * @param protestName
+     * @param movementName
+     */
     ResistanceModel.prototype.addProtestToMovement = function (protestName, movementName) {
         var protests = this.find(this.protests, protestName);
         var movements = this.find(this.movements, movementName);
@@ -85,7 +125,11 @@ var ResistanceModel = (function () {
             });
         }
     };
-    // Returns all the Protesters involved in a Protest and their email addresses
+    /**
+     * Returns all the Protesters involved in a Protest and their email addresses.
+     * @param protestName
+     * @return {string[]} An array of protesters' names and email addresses
+     */
     ResistanceModel.prototype.getProtesters = function (protestName) {
         var results = this.find(this.protests, protestName);
         if (results.length > 0) {
@@ -97,7 +141,12 @@ var ResistanceModel = (function () {
         }
         return results;
     };
-    // Returns Protesters who are near a Protest
+    /**
+     * Returns Protesters who are near a Protest
+     * @param protestName
+     * @param radius
+     * @return {string[]} an array of matches
+     */
     ResistanceModel.prototype.getUsersNearProtest = function (protestName, radius) {
         var _this = this;
         var results = [];
@@ -113,7 +162,12 @@ var ResistanceModel = (function () {
         }
         return results;
     };
-    // Returns Protests near a location, as well as the Movements they are part of
+    /**
+     * Returns Protests near a location, as well as the Movements they are part of
+     * @param zipcode
+     * @param radius
+     * @return {string[]} an array of matches
+     */
     ResistanceModel.prototype.getNearbyProtests = function (zipcode, radius) {
         var results = [];
         this.protests.forEach(function (protest) {

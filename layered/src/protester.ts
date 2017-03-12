@@ -9,6 +9,12 @@ export class Protester {
     private email: string;
     private location: ZcLocation;
 
+    /**
+     * Constructs a Protester
+     * @param name
+     * @param email
+     * @param zipcode
+     */
     constructor(name: string, email?: string, zipcode?: string) {
         this.name = name;
         this.email = email;
