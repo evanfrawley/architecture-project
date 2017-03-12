@@ -4,30 +4,24 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "node build/index.js",
     "serve": "./node_modules/.bin/webpack-dev-server --inline --open",
-    "build": "./node_modules/.bin/webpack --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "./node_modules/.bin/webpack --watch"
   },
-  "author": "Wei-Jen and Evan",
+  "author": "Evan and Wei-Jen",
   "license": "MIT",
   "dependencies": {
     "event-emitter": "^0.3.4",
     "flux": "^3.1.2",
     "geolib": "^2.0.22",
     "jquery": "^3.1.1",
-    "lodash": "^4.17.4",
-    "react": "^15.4.2",
-    "requirejs": "^2.3.3"
+    "react": "^15.4.2"
   },
   "devDependencies": {
     "@types/flux": "^3.0.1",
     "@types/geolib": "^2.0.0",
     "@types/jquery": "^2.0.41",
-    "@types/lodash": "^4.14.55",
     "@types/node": "^7.0.8",
     "@types/react": "^15.0.16",
-    "@types/requirejs": "^2.1.28",
     "awesome-typescript-loader": "^3.1.2",
     "source-map-loader": "^0.2.0",
     "typescript": "^2.2.1",
