@@ -4,6 +4,12 @@
         "module": "commonjs",
         "outDir": "build/",
         "alwaysStrict": true,
-        "compileOnSave":false
+        "compileOnSave":false,
+        "types": [
+            "node"
+        ],
+        "exclude": [
+            "node_modules"
+        ]
     }
 }

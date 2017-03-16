@@ -1,0 +1,31 @@
+{
+  "name": "flux-arch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "serve": "./node_modules/.bin/webpack-dev-server --inline --open",
+    "build": "./node_modules/.bin/webpack --watch"
+  },
+  "author": "Evan and Wei-Jen",
+  "license": "MIT",
+  "dependencies": {
+    "event-emitter": "^0.3.4",
+    "flux": "^3.1.2",
+    "geolib": "^2.0.22",
+    "jquery": "^3.1.1",
+    "react": "^15.4.2"
+  },
+  "devDependencies": {
+    "@types/flux": "^3.0.1",
+    "@types/geolib": "^2.0.0",
+    "@types/jquery": "^2.0.41",
+    "@types/node": "^7.0.8",
+    "@types/react": "^15.0.16",
+    "awesome-typescript-loader": "^3.1.2",
+    "source-map-loader": "^0.2.0",
+    "typescript": "^2.2.1",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.1"
+  }
+}
