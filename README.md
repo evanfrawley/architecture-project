@@ -1,5 +1,6 @@
 # This was a homework assignment for Software Architecture. 
 ## Here, I (Evan) implemented a Flux architecture from scratch :)
+## My friend Wei-Jen implemented layed MVC
 
 # Architected Resistance
 
